@@ -406,7 +406,8 @@ private:
 #endif // SWIG
 public:
 	static eEPGCache *getInstance() { return instance; }
-
+	
+	void crossepgImportEPGv21(std::string dbroot);
 	void save();
 	void load();
 	void timeUpdated();
@@ -515,11 +516,4 @@ inline void eEPGCache::Unlock()
 #endif
 
 #endif
-public:
-        static eEPGCache *getInstance() { return instance; }
-        
-	void crossepgImportEPGv21(std::string dbroot);
-	void save();   
-	void load();
-	void timeUpdated();
                                         
