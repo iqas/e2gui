@@ -557,10 +557,12 @@ void eEPGCache::DVBChannelRunning(iDVBChannel *chan)
 
 void eEPGCache::DVBChannelStateChanged(iDVBChannel *chan)
 {
+	eDebug("[eEPGCache] PASO1");  
 	channelMapIterator it =
 		m_knownChannels.find(chan);
 	if ( it != m_knownChannels.end() )
 	{
+		eDebug("[eEPGCache] PASO2");  
 		int state=0;
 		chan->getState(state);
 		if ( it->second->prevChannelState != state )
@@ -588,6 +590,7 @@ void eEPGCache::DVBChannelStateChanged(iDVBChannel *chan)
 					break;
 				}
 				default: // ignore all other events
+					eDebug("[eEPGCache] PASO3");  
 					return;
 			}
 			if (it->second)
@@ -877,6 +880,7 @@ void eEPGCache::sectionRead(const uint8_t *data, int source, channel_data *chann
 #ifdef EPG_DEBUG
 			if ( consistencyCheck )
 			{
+				eDebug("[eEPGCache] PASO5");  
 				if ( tm_it->second != evt || ev_it->second != evt )
 					eFatal("tm_it->second != ev_it->second");
 				else if ( tm_it->second->getStartTime() != tm_it->first )
@@ -985,6 +989,7 @@ void eEPGCache::flushEPG(const uniqueEPGKey & s)
 
 void eEPGCache::cleanLoop()
 {
+	eDebug("[eEPGCache] PASO6");  
 	singleLock s(cache_lock);
 	if (!eventDB.empty())
 	{
@@ -1049,6 +1054,7 @@ void eEPGCache::cleanLoop()
 
 eEPGCache::~eEPGCache()
 {
+	eDebug("[eEPGCache] PASO7");  
 	messages.send(Message::quit);
 	kill(); // waiting for thread shutdown
 	singleLock s(cache_lock);
@@ -1186,13 +1192,19 @@ void eEPGCache::gotMessage( const Message &msg )
 
 void eEPGCache::thread()
 {
+	eDebug("[eEPGCache] PASO9");  
 	hasStarted();
+	eDebug("[eEPGCache] PASO10");  
 	m_running = true;
 	nice(4);
 	load();
+	eDebug("[eEPGCache] PASO11");  
 	cleanLoop();
+	eDebug("[eEPGCache] PASO12");  
 	runLoop();
+	eDebug("[eEPGCache] PASO13");  
 	save();
+	eDebug("[eEPGCache] PASO14");  
 	m_running = false;
 }
 
@@ -1477,6 +1489,7 @@ bool eEPGCache::channel_data::finishEPG()
 
 void eEPGCache::channel_data::startEPG()
 {
+	eDebug("[eEPGCache] PASO15");  
 	eDebug("[EPGC] start caching events(%ld)", ::time(0));
 	state=0;
 	haveData=0;
@@ -1630,6 +1643,7 @@ void eEPGCache::channel_data::startEPG()
 
 void eEPGCache::channel_data::abortNonAvail()
 {
+	eDebug("[eEPGCache] PASO16");  
 	if (!state)
 	{
 		if ( !(haveData&NOWNEXT) && (isRunning&NOWNEXT) )
@@ -1742,6 +1756,7 @@ void eEPGCache::channel_data::abortNonAvail()
 
 void eEPGCache::channel_data::startChannel()
 {
+	eDebug("[eEPGCache] PASO17");  
 	pthread_mutex_lock(&channel_active);
 	updateMap::iterator It = cache->channelLastUpdated.find( channel->getChannelID() );
 
