@@ -43,6 +43,18 @@ ButtonSetupKeys = [	(_("Red"), "red", ""),
 	(_("Subtitle"), "subtitle", ""),
 	(_("Menu"), "mainMenu", ""),
 	(_("List/Fav/PVR"), "list", ""),
+	(_("List/Fav/PVR long"), "list_long", ""),
+	(_("File"), "file", ""),
+	(_("File long"), "file_long", ""),
+	(_("OK long"), "ok_long", ""),
+	(_("Media"), "media", ""),
+	(_("Media long"), "media_long", ""),
+	(_("Open"), "open", ""),
+	(_("Open long"), "open_long", ""),
+	(_("Www"), "www", ""),
+	(_("Www long"), "www_long", ""),
+	(_("Directory"), "directory", ""),
+	(_("Directory long"), "directory_long", ""),
 	(_("Back/Recall"), "back", ""),
 	(_("Back/Recall") + " " + _("long"), "back_long", ""),
 	(_("Home"), "home", ""),
@@ -61,16 +73,21 @@ ButtonSetupKeys = [	(_("Red"), "red", ""),
 	(_("activatePiP"), "activatePiP", ""),
 	(_("Timer"), "timer", ""),
 	(_("Playlist"), "playlist", ""),
+	(_("Playlist long"), "playlist_long", ""),
 	(_("Timeshift"), "timeshift", ""),
+	(_("Homepage"), "homep", ""),
+	(_("Homepage long"), "homep_long", ""),
 	(_("Search/WEB"), "search", ""),
+	(_("Search/WEB long"), "search_long", ""),
 	(_("Slow"), "slow", ""),
 	(_("Mark/Portal/Playlist"), "mark", ""),
 	(_("Sleep"), "sleep", ""),
 	(_("Power"), "power", ""),
 	(_("Power long"), "power_long", ""),
 	(_("Context"), "contextMenu", "Infobar/showExtensionSelection"),
-	(_("SAT"), "sat", ""),
-	(_("F1/LAN"), "f1", "Infobar/showNetworkMounts"),
+	(_("SAT"), "sat", "Infobar/openSatellites"),
+	(_("SAT long"), "sat_long", ""),
+	(_("F1/LAN"), "f1", ""),
 	(_("F1/LAN long"), "f1_long", ""),
 	(_("F2"), "f2", ""),
 	(_("F2 long"), "f2_long", ""),
@@ -112,8 +129,12 @@ def getButtonSetupFunctions():
 	ButtonSetupFunctions.append((_("Show extension selection"), "Infobar/showExtensionSelection", "InfoBar"))
 	ButtonSetupFunctions.append((_("Zap down"), "Infobar/zapDown", "InfoBar"))
 	ButtonSetupFunctions.append((_("Zap up"), "Infobar/zapUp", "InfoBar"))
+	ButtonSetupFunctions.append((_("Volume down"), "Infobar/volumeDown", "InfoBar"))
+	ButtonSetupFunctions.append((_("Volume up"), "Infobar/volumeUp", "InfoBar"))
+	ButtonSetupFunctions.append((_("Show Infobar"), "Infobar/toggleShow", "InfoBar"))
 	ButtonSetupFunctions.append((_("Show service list"), "Infobar/openServiceList", "InfoBar"))
-	ButtonSetupFunctions.append((_("Show favourites list"), "Infobar/openFavouritesList", "InfoBar"))
+	ButtonSetupFunctions.append((_("Show favourites list"), "Infobar/openBouquets", "InfoBar"))
+	ButtonSetupFunctions.append((_("Show satellites list"), "Infobar/openSatellites", "InfoBar"))
 	ButtonSetupFunctions.append((_("History back"), "Infobar/historyBack", "InfoBar"))
 	ButtonSetupFunctions.append((_("History next"), "Infobar/historyNext", "InfoBar"))
 	ButtonSetupFunctions.append((_("Show eventinfo plugins"), "Infobar/showEventInfoPlugins", "EPG"))
@@ -176,6 +197,8 @@ def getButtonSetupFunctions():
 		for x in [x for x in os.listdir("/usr/script") if x.endswith(".sh")]:
 			x = x[:-3]
 			ButtonSetupFunctions.append((_("Shellscript") + " " + x, "Shellscript/" + x, "Shellscripts"))
+	if os.path.isfile("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/plugin.pyo"):
+		ButtonSetupFunctions.append((_("EnhancedMovieCenter"), "EMC/", "Plugins"))
 	return ButtonSetupFunctions
 
 class ButtonSetup(Screen):
@@ -183,7 +206,7 @@ class ButtonSetup(Screen):
 		Screen.__init__(self, session)
 		self['description'] = Label(_('Click on your remote on the button you want to change'))
 		self.session = session
-		self.setTitle(_("Button setup"))
+		self.setTitle(_("Hotkey Setup"))
 		self["key_red"] = Button(_("Exit"))
 		self.list = []
 		self.ButtonSetupFunctions = getButtonSetupFunctions()
@@ -252,7 +275,7 @@ class ButtonSetupSelect(Screen):
 		self['description'] = Label(_('Select the desired function and click on "OK" to assign it. Use "CH+/-" to toggle between the lists. Select an assigned function and click on "OK" to de-assign it. Use "Next/Previous" to change the order of the assigned functions.'))
 		self.session = session
 		self.key = key
-		self.setTitle(_("Button setup for") + ": " + key[0][0])
+		self.setTitle(_("Hotkey Setup for") + ": " + key[0][0])
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Save"))
 		self.mode = "list"
@@ -516,4 +539,11 @@ class InfoBarButtonSetup():
 				if os.path.isfile(command) and os.path.isdir('/usr/lib/enigma2/python/Plugins/Extensions/PPanel'):
 					from Plugins.Extensions.PPanel.ppanel import Execute
 					self.session.open(Execute, selected[1] + " shellscript", None, command)
+			elif selected[0] == "EMC":
+				try:
+					from Plugins.Extensions.EnhancedMovieCenter.plugin import showMoviesNew
+					from Screens.InfoBar import InfoBar
+					open(showMoviesNew(InfoBar.instance))
+				except Exception as e:
+					print('[EMCPlayer] showMovies exception:\n' + str(e))
 

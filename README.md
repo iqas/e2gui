@@ -1,4 +1,1 @@
-enigma2
-=======
-
-openatv-gui
+Openplus gui

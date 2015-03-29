@@ -123,6 +123,7 @@ AM_CONDITIONAL(ET8500, test "$BOXTYPE" == et8500)
 AM_CONDITIONAL(ET10000, test "$BOXTYPE" == et10000)
 AM_CONDITIONAL(FORCE1, test "$BOXTYPE" == force1)
 AM_CONDITIONAL(WORLDVISIONF1, test "$BOXTYPE" == worldvisionf1)
+AM_CONDITIONAL(TRIPLEX, test "$BOXTYPE" == triplex)
 AM_CONDITIONAL(FORMULER1, test "$BOXTYPE" == formuler1)
 AM_CONDITIONAL(FORMULER3, test "$BOXTYPE" == formuler3)
 AM_CONDITIONAL(GBIPBOX, test "$BOXTYPE" == gbipbox)
@@ -160,6 +161,7 @@ AM_CONDITIONAL(TM2TOE, test "$BOXTYPE" == tm2t)
 AM_CONDITIONAL(TMSINGLE, test "$BOXTYPE" == tmsingle)
 AM_CONDITIONAL(TMNANO, test "$BOXTYPE" == tmnano)
 AM_CONDITIONAL(TMNANO2T, test "$BOXTYPE" == tmnano2t)
+AM_CONDITIONAL(TMNANOSE, test "$BOXTYPE" == tmnanose)
 AM_CONDITIONAL(VUUNO, test "$BOXTYPE" == vuuno)
 AM_CONDITIONAL(VUULTIMO, test "$BOXTYPE" == vuultimo)
 AM_CONDITIONAL(VUSOLO, test "$BOXTYPE" == vusolo)
@@ -173,6 +175,12 @@ AM_CONDITIONAL(XP1000, test "$BOXTYPE" == xp1000)
 AM_CONDITIONAL(HAVE_COLORLCD3, test "$BOXTYPE" == dm7080)
 AM_CONDITIONAL(HAVE_COLORLCD2, test "$BOXTYPE" == dm800se -o "$BOXTYPE" == dm800sev2 -o "$BOXTYPE" == dm820)
 AM_CONDITIONAL(HAVE_COLORLCD1, test "$BOXTYPE" == dm8000 -o "$BOXTYPE" == dm800 -o "$BOXTYPE" == dm7020hd -o "$BOXTYPE" == dm7020hdv2)
+
+AC_ARG_WITH(machinebuild,
+	[  --with-machinebuild=NAME machine build [[none,atemeo5200,atemeo6000...]]],
+	[MACHINEBUILD="$withval"],[MACHINEBUILD="atemeo5200"])
+AC_SUBST(MACHINEBUILD)
+AC_DEFINE_UNQUOTED(MACHINEBUILD,"$MACHINEBUILD",[machine build])
 
 AC_ARG_WITH(libvugles2,
 	AS_HELP_STRING([--with-libvugles2],[use libvugles2, yes or no]),
@@ -257,6 +265,17 @@ if test x"$withcolorlcd400" != xno ; then
 fi
 
 AM_CONDITIONAL(HAVE_COLORLCD400, test x"$withcolorlcd400" != xno)
+
+AC_ARG_WITH(colorlcd720,
+	AC_HELP_STRING([--with-colorlcd720], [use 720x576 16bpp color display, yes or no]),
+	[[withcolorlcd720=$withval]],
+	[[withcolorlcd720=no]]
+)
+if test x"$withcolorlcd720" != xno ; then
+	AC_DEFINE(HAVE_COLORLCD720, 1,[Define when using a 720x576 color display device])
+fi
+
+AM_CONDITIONAL(HAVE_COLORLCD720, test x"$withcolorlcd720" != xno)
 
 AC_ARG_WITH(bwlcd255,
 	AC_HELP_STRING([--with-bwlcd255], [use 255x64 1bpp black and white display, yes or no]),
@@ -356,22 +375,35 @@ if test "$BOXTYPE" == "et4x00" -o "$BOXTYPE" == "et5x00" -o "$BOXTYPE" == "et6x0
 	AC_DEFINE(KEY_F3_TO_KEY_LIST, 1,[define when rc sends a KEY_F3 event for its KEY_LIST key])
 fi
 
+if test "$BOXTYPE" == "et8500"; then
+	AC_DEFINE(FORCE_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration has alphablending support, but detection slow down all])
+fi
+
 if test "$BOXTYPE" == "et7x00"; then
 	AC_DEFINE(KEY_F1_TO_KEY_F2, 1,[define when rc sends a KEY_F1 event for its KEY_F2 key])
+	AC_DEFINE(FORCE_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration has alphablending support, but detection slow down all])
 fi
 
-if test "$BOXTYPE" == "hd2400" -o "$BOXTYPE" == "hd1100"; then
+if test "$BOXTYPE" == "xc7362"; then
+	AC_DEFINE(KEY_FAV_TO_KEY_PVR, 1,[define FAV KEY to PVR])
+fi
+
+if test "$BOXTYPE" == "hd2400" -o "$BOXTYPE" == "hd1100" -o "$BOXTYPE" == "hd1200" -o "$BOXTYPE" == "hd500c"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 	AC_DEFINE(KEY_F3_TO_KEY_LIST, 1,[define when rc sends a KEY_F3 event for its KEY_LIST key])
 fi
 
-if test "$BOXTYPE" == "formuler1" -o "$BOXTYPE" == "formuler3"; then
+if test "$BOXTYPE" == "formuler1" -o "$BOXTYPE" == "formuler3" -o "$BOXTYPE" == "triplex" -o "$BOXTYPE" == "sf108"; then
 	AC_DEFINE(KEY_F3_TO_KEY_LIST, 1,[define when rc sends a KEY_F3 event for its KEY_LIST key])
 fi
 
-if test "$BOXTYPE" == "ew7358" -o  "$BOXTYPE" == "ew7356" -o "$BOXTYPE" == "ew7362"; then
+if test "$BOXTYPE" == "ew7358" -o "$BOXTYPE" == "ew7362"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 	AC_DEFINE(KEY_MEDIA_TO_KEY_LIST, 1,[define when rc sends a KEY_MEDIA event for its KEY_LIST key])
+fi
+
+if test "$BOXTYPE" == "ew7356" ; then
+	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 fi
 
 if test "$BOXTYPE" == "sh1" ; then
@@ -413,10 +445,6 @@ if test "$BOXTYPE" == "gb800solo" -o "$BOXTYPE" == "gb800se" -o "$BOXTYPE" == "g
 	AC_DEFINE(KEY_SCREEN_TO_KEY_MODE, 1,[define when rc sends a KEY_MODE event for its KEY_ASPECT key])
 fi
 
-#if test "$BOXTYPE" == "gbipbox"; then
-#	AC_DEFINE(FORCE_SERVICEAVAIL, 1,[define SERVICEAVAIL for GBIPBOX allways true ])
-#fi
-
 if test "$BOXTYPE" == "inihde" -o "$BOXTYPE" == "inihdx" -o "$BOXTYPE" == "inihdp" -o "$BOXTYPE" == "inihde2"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
@@ -427,6 +455,12 @@ if test "$BOXTYPE" == "inihde" -o "$BOXTYPE" == "inihdx" -o "$BOXTYPE" == "inihd
 	AC_DEFINE(KEY_VIDEO_TO_KEY_MODE, 1,[define when rc sends a KEY_VIDEO event for its KEY_MODE key])
 	AC_DEFINE(KEY_BOOKMARKS_TO_KEY_DIRECTORY, 1,[define when rc sends a KEY_BOOKMARKS event for its KEY_DIRECTORY key])
 	AC_DEFINE(KEY_LIST_TO_KEY_PVR, 1,[define when rc sends a KEY_LIST event for its KEY_PVR key])
+fi
+
+if test "$MACHINEBUILD" == "bwidowx" ; then
+	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
+	AC_DEFINE(KEY_ZOOM_TO_KEY_SCREEN, 1,[define when rc sends a KEY_ZOOM event for its KEY_SCREEN key])
+	AC_DEFINE(KEY_LAST_TO_KEY_PVR, 1,[define when rc sends a KEY_LAST event for its KEY_PVR key])
 fi
 
 if test "$BOXTYPE" == "vg1000" -o "$BOXTYPE" == "vg2000" -o "$BOXTYPE" == "vg5000"; then
@@ -514,6 +548,7 @@ data/display128/Makefile
 data/display128dm/Makefile
 data/display220/Makefile
 data/display400/Makefile
+data/display720/Makefile
 data/vfd128/Makefile
 data/vfd140/Makefile
 data/vfd255/Makefile
@@ -532,8 +567,6 @@ lib/python/Plugins/Extensions/CutListEditor/Makefile
 lib/python/Plugins/Extensions/CutListEditor/meta/Makefile
 lib/python/Plugins/Extensions/DVDBurn/Makefile
 lib/python/Plugins/Extensions/DVDBurn/meta/Makefile
-lib/python/Plugins/Extensions/supportchannel/Makefile
-lib/python/Plugins/Extensions/supportchannel/skins/Makefile
 lib/python/Plugins/Extensions/DVDPlayer/Makefile
 lib/python/Plugins/Extensions/DVDPlayer/meta/Makefile
 lib/python/Plugins/Extensions/MediaPlayer/Makefile
@@ -581,32 +614,6 @@ lib/python/Plugins/SystemPlugins/Satfinder/Makefile
 lib/python/Plugins/SystemPlugins/Satfinder/meta/Makefile
 lib/python/Plugins/SystemPlugins/SoftwareManager/Makefile
 lib/python/Plugins/SystemPlugins/SoftwareManager/meta/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/meta/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/Daemons/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/images/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/locale/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/locale/de/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/locale/de/LC_MESSAGES/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/locale/es/Makefile             
-lib/python/Plugins/SystemPlugins/LBpanel/locale/es/LC_MESSAGES/Makefile    
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/de/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/de/LC_MESSAGES/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/es/Makefile           
-lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/es/LC_MESSAGES/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/GboxSuite/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/de/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/de/LC_MESSAGES/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/es/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/es/LC_MESSAGES/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/script/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/script/libmem/Makefile
-lib/python/Plugins/SystemPlugins/LBpanel/templates/Makefile
 lib/python/Plugins/SystemPlugins/VideoClippingSetup/Makefile
 lib/python/Plugins/SystemPlugins/VideoEnhancement/Makefile
 lib/python/Plugins/SystemPlugins/VideoEnhancement/meta/Makefile
@@ -618,6 +625,32 @@ lib/python/Plugins/SystemPlugins/SkinSelector/Makefile
 lib/python/Plugins/SystemPlugins/SkinSelector/meta/Makefile
 lib/python/Plugins/SystemPlugins/AnimationSetup/Makefile
 lib/python/Tools/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/meta/Makefile     
+lib/python/Plugins/SystemPlugins/LBpanel/Daemons/Makefile  
+lib/python/Plugins/SystemPlugins/LBpanel/images/Makefile   
+lib/python/Plugins/SystemPlugins/LBpanel/libs/Makefile     
+lib/python/Plugins/SystemPlugins/LBpanel/locale/Makefile   
+lib/python/Plugins/SystemPlugins/LBpanel/locale/de/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/locale/de/LC_MESSAGES/Makefile    
+lib/python/Plugins/SystemPlugins/LBpanel/locale/es/Makefile                
+lib/python/Plugins/SystemPlugins/LBpanel/locale/es/LC_MESSAGES/Makefile    
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/Makefile   
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/de/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/de/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/es/Makefile            
+lib/python/Plugins/SystemPlugins/LBpanel/libs/CCcamInfo/locale/es/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/GboxSuite/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/Makefile   
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/de/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/de/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/es/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/es/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/script/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/script/libmem/Makefile
+lib/python/Plugins/SystemPlugins/LBpanel/templates/Makefile
 po/Makefile
 main/Makefile
 tools/Makefile

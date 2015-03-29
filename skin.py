@@ -80,7 +80,7 @@ def skin_user_skinname():
 
 # example: loadSkin("nemesis_greenline/skin.xml")
 config.skin = ConfigSubsection()
-DEFAULT_SKIN = "iplusHD/skin.xml"
+DEFAULT_SKIN = "openplusHD/skin.xml"
 if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
 	DEFAULT_SKIN = "MetrixHD/skin.xml"
 if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
@@ -92,11 +92,11 @@ DEFAULT_DISPLAY_SKIN = "skin_display.xml"
 config.skin.display_skin = ConfigText(default=DEFAULT_DISPLAY_SKIN)
 
 # Create etc/chipset for iplusHD
-if not os.path.isfile("/etc/chipset"):                                                                                   
-	with open ('/etc/chipset', 'a') as f:
-        	f.write ("7400")
-        	f.close()
-
+if not os.path.isfile("/etc/chipset"):       
+        with open ('/etc/chipset', 'a') as f:
+		f.write ("7400")
+		f.close()
+                                        
 profile("LoadSkin")
 try:
 	name = skin_user_skinname()
@@ -323,6 +323,17 @@ class AttributeParser:
 			self.guiObject.resize(eSize(*value))
 		else:
 			self.guiObject.resize(parseSize(value, self.scaleTuple, self.guiObject, self.desktop))
+	def animationPaused(self, value):
+		pass
+	def animationMode(self, value):
+		self.guiObject.setAnimationMode(
+			{ "disable": 0x00,
+				"off": 0x00,
+				"offshow": 0x10,
+				"offhide": 0x01,
+				"onshow": 0x01,
+				"onhide": 0x10,
+			}[value])
 	def title(self, value):
 		self.guiObject.setTitle(_(value))
 	def text(self, value):

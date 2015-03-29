@@ -8,6 +8,7 @@ from Screens.Standby import *
 from Screens.MessageBox import MessageBox
 from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap 
 from Screens.Screen import Screen
+from Screens.ParentalControlSetup import ProtectedScreen
 from Screens.ChoiceBox import ChoiceBox
 from Tools.BoundFunction import boundFunction
 from Tools.LoadPixmap import LoadPixmap
@@ -184,7 +185,7 @@ def main(session, **kwargs):
 
 def Apanel(menuid, **kwargs):
 	if menuid == "mainmenu":
-		return [("Info Panel", main, "Infopanel", 11)]
+		return [("Info Panel", main, "Infopanel", 3)]
 	else:
 		return []
 
@@ -251,14 +252,25 @@ INFO_SKIN2 =  """<screen name="PANEL-Info2"  position="center,center" size="530,
 class PanelList(MenuList):
 	def __init__(self, list, font0 = 24, font1 = 16, itemHeight = 50, enableWrapAround = True):
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", font0))
-		self.l.setFont(1, gFont("Regular", font1))
-		self.l.setItemHeight(itemHeight)
+		screenwidth = getDesktop(0).size().width()
+		if screenwidth and screenwidth == 1920:
+			self.l.setFont(0, gFont("Regular", int(font0 * 1.5)))
+			self.l.setFont(1, gFont("Regular", int(font1 * 1.5)))
+			self.l.setItemHeight(int(itemHeight*1.5))
+		else:
+			self.l.setFont(0, gFont("Regular", font0))
+			self.l.setFont(1, gFont("Regular", font1))
+			self.l.setItemHeight(itemHeight)
 
 def MenuEntryItem(entry):
 	res = [entry]
-	res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 5), size=(40, 40), png=entry[0]))  # png vorn
-	res.append(MultiContentEntryText(pos=(60, 10), size=(440, 40), font=0, text=entry[1]))  # menupunkt
+	screenwidth = getDesktop(0).size().width()
+	if screenwidth and screenwidth == 1920:
+		res.append(MultiContentEntryPixmapAlphaBlend(pos=(15, 8), size=(60, 60), png=entry[0]))  # png vorn
+		res.append(MultiContentEntryText(pos=(90, 15), size=(660, 60), font=0, text=entry[1]))  # menupunkt
+	else:
+		res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 5), size=(40, 40), png=entry[0]))  # png vorn
+		res.append(MultiContentEntryText(pos=(60, 10), size=(440, 40), font=0, text=entry[1]))  # menupunkt
 	return res
 ###################  Max Test ###################
 
@@ -278,10 +290,12 @@ def InfoEntryComponent(file):
 	res = (png)
 	return res
 
-class Infopanel(Screen, InfoBarPiP):
+class Infopanel(Screen, InfoBarPiP, ProtectedScreen):
 	servicelist = None
 	def __init__(self, session, services = None):
 		Screen.__init__(self, session)
+		if config.ParentalControl.configured.value:
+			ProtectedScreen.__init__(self)
 		self.session = session
 		self.skin = MENU_SKIN
 		self.onShown.append(self.setWindowTitle)
@@ -334,6 +348,9 @@ class Infopanel(Screen, InfoBarPiP):
 		self["Mlist"].l.setList(self.Mlist)
 		menu = 0
 		self["Mlist"].onSelectionChanged.append(self.selectionChanged)
+
+	def isProtected(self):
+		return config.ParentalControl.setuppinactive.value and config.ParentalControl.config_sections.infopanel.value
 
 	def createSummary(self):
 		pass

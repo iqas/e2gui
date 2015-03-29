@@ -1,5 +1,5 @@
 
-from enigma import eListboxPythonMultiContent, gFont, eEnv
+from enigma import eListboxPythonMultiContent, gFont, eEnv, getDesktop
 from boxbranding import getMachineBrand, getMachineName, getBoxType, getBrandOEM
 from Components.ActionMap import ActionMap
 from Components.Label import Label
@@ -12,6 +12,7 @@ from Components.NimManager import nimmanager
 from Components.SystemInfo import SystemInfo
 
 from Screens.Screen import Screen
+from Screens.ParentalControlSetup import ProtectedScreen
 from Screens.NetworkSetup import *
 from Screens.About import About
 from Screens.PluginBrowser import PluginDownloadBrowser, PluginFilter, PluginBrowser
@@ -20,8 +21,8 @@ from Screens.Satconfig import NimSelection
 from Screens.ScanSetup import ScanSimple, ScanSetup
 from Screens.Setup import Setup, getSetupTitle
 from Screens.HarddiskSetup import HarddiskSelection, HarddiskFsckSelection, HarddiskConvertExt4Selection
-from Screens.SkinSelector import LcdSkinSelector
-from Screens.VideoMode import VideoSetup
+from Screens.SkinSelector import LcdSkinSelector, SkinSelector
+from Screens.VideoMode import VideoSetup, AudioSetup
 
 from Plugins.Plugin import PluginDescriptor
 from Plugins.SystemPlugins.NetworkBrowser.MountManager import AutoMountManager
@@ -102,7 +103,7 @@ def Check_Softcam():
 			break;
 	return found
 
-class QuickMenu(Screen):
+class QuickMenu(Screen, ProtectedScreen):
 	skin = """
 		<screen name="QuickMenu" position="center,center" size="1180,600" backgroundColor="black" flags="wfBorder">
 		<widget name="list" position="21,32" size="370,400" backgroundColor="black" itemHeight="50" transparent="1" />
@@ -122,6 +123,8 @@ class QuickMenu(Screen):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
+		if config.ParentalControl.configured.value:
+			ProtectedScreen.__init__(self)
 		Screen.setTitle(self, _("Quick Launch Menu"))
 
 		self["key_red"] = Label(_("Exit"))
@@ -164,6 +167,9 @@ class QuickMenu(Screen):
 		self.selectedList = self["list"]
 		self.selectionChanged()
 		self.onLayoutFinish.append(self.layoutFinished)
+
+	def isProtected(self):
+		return config.ParentalControl.setuppinactive.value and config.ParentalControl.config_sections.quickmenu.value
 
 	def createSummary(self):
 		pass
@@ -245,6 +251,7 @@ class QuickMenu(Screen):
 			self.sublist.append(QuickSubMenuEntryComponent("Display Settings",_("Display Setup"),_("Setup your display")))
 		if SystemInfo["LCDSKINSetup"]:
 			self.sublist.append(QuickSubMenuEntryComponent("LCD Skin Setup",_("Skin Setup"),_("Setup your LCD")))
+		self.sublist.append(QuickSubMenuEntryComponent("Skin Setup",_("Skin Setup"),_("Setup your Skin")))	
 		self.sublist.append(QuickSubMenuEntryComponent("Channel selection",_("Channel selection configuration"),_("Setup your Channel selection configuration")))
 		self.sublist.append(QuickSubMenuEntryComponent("Recording settings",_("Recording Setup"),_("Setup your recording config")))
 		self.sublist.append(QuickSubMenuEntryComponent("EPG settings",_("EPG Setup"),_("Setup your EPG config")))
@@ -298,7 +305,8 @@ class QuickMenu(Screen):
 ######## A/V Settings Menu ##############################
 	def Qavsetup(self):
 		self.sublist = []
-		self.sublist.append(QuickSubMenuEntryComponent("AV Settings",_("Setup Videomode"),_("Setup your Video Mode, Video Output and other Video Settings")))
+		self.sublist.append(QuickSubMenuEntryComponent("Video Settings",_("Setup Videomode"),_("Setup your Video Mode, Video Output and other Video Settings")))
+		self.sublist.append(QuickSubMenuEntryComponent("Audio Settings",_("Setup Audiomode"),_("Setup your Audio Mode")))
 		if AUDIOSYNC == True:
 			self.sublist.append(QuickSubMenuEntryComponent("Audio Sync",_("Setup Audio Sync"),_("Setup Audio Sync settings")))
 		self.sublist.append(QuickSubMenuEntryComponent("Auto Language",_("Auto Language Selection"),_("Select your Language for Audio/Subtitles")))
@@ -447,6 +455,8 @@ class QuickMenu(Screen):
 			self.openSetup("display")
 		elif item[0] == _("LCD Skin Setup"):
 			self.session.open(LcdSkinSelector)
+		elif item[0] == _("Skin Setup"):
+			self.session.open(SkinSelector)	
 		elif item[0] == _("OSD settings"):
 			self.openSetup("userinterface")
 		elif item[0] == _("Channel selection"):
@@ -470,8 +480,10 @@ class QuickMenu(Screen):
 		elif item[0] == _("Download Softcams"):
 			self.session.open(ShowSoftcamPackages)
 ######## Select AV Setup Menu ##############################
-		elif item[0] == _("AV Settings"):
+		elif item[0] == _("Video Settings"):
 			self.session.open(VideoSetup)
+		elif item[0] == _("Audio Settings"):
+			self.session.open(AudioSetup)
 		elif item[0] == _("Auto Language"):
 			self.openSetup("autolanguagesetup")
 		elif item[0] == _("Audio Sync"):
@@ -628,35 +640,66 @@ def QuickMenuEntryComponent(name, description, long_description = None, width=54
 	if png is None:
 		png = LoadPixmap("/usr/lib/enigma2/python/Plugins/Extensions/Infopanel/icons/default.png")
 
-	return [
-		_(name),
-		MultiContentEntryText(pos=(60, 5), size=(width-60, 25), font=0, text = _(name)),
-		MultiContentEntryText(pos=(60, 26), size=(width-60, 17), font=1, text = _(description)),
-		MultiContentEntryPixmapAlphaBlend(pos=(10, 5), size=(40, 40), png = png),
-		_(long_description),
-	]
+	screenwidth = getDesktop(0).size().width()
+	if screenwidth and screenwidth == 1920:
+		return [
+			_(name),
+			MultiContentEntryText(pos=(90, 10), size=(width-90, 38), font=0, text = _(name)),
+			MultiContentEntryText(pos=(90, 39), size=(width-90, 26), font=1, text = _(description)),
+			MultiContentEntryPixmapAlphaBlend(pos=(15, 10), size=(60, 60), png = png),
+			_(long_description),
+		]
+	else:
+		return [
+			_(name),
+			MultiContentEntryText(pos=(60, 5), size=(width-60, 25), font=0, text = _(name)),
+			MultiContentEntryText(pos=(60, 26), size=(width-60, 17), font=1, text = _(description)),
+			MultiContentEntryPixmapAlphaBlend(pos=(10, 5), size=(40, 40), png = png),
+			_(long_description),
+		]
 
 def QuickSubMenuEntryComponent(name, description, long_description = None, width=540):
-	return [
-		_(name),
-		MultiContentEntryText(pos=(10, 5), size=(width-10, 25), font=0, text = _(name)),
-		MultiContentEntryText(pos=(10, 26), size=(width-10, 17), font=1, text = _(description)),
-		_(long_description),
-	]
+	screenwidth = getDesktop(0).size().width()
+	if screenwidth and screenwidth == 1920:
+		return [
+			_(name),
+			MultiContentEntryText(pos=(15, 8), size=(width-15, 38), font=0, text = _(name)),
+			MultiContentEntryText(pos=(15, 39), size=(width-15, 26), font=1, text = _(description)),
+			_(long_description),
+		]
+	else:
+		return [
+			_(name),
+			MultiContentEntryText(pos=(10, 5), size=(width-10, 25), font=0, text = _(name)),
+			MultiContentEntryText(pos=(10, 26), size=(width-10, 17), font=1, text = _(description)),
+			_(long_description),
+		]
 
 class QuickMenuList(MenuList):
 	def __init__(self, list, enableWrapAround=True):
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
-		self.l.setFont(1, gFont("Regular", 14))
-		self.l.setItemHeight(50)
+		screenwidth = getDesktop(0).size().width()
+		if screenwidth and screenwidth == 1920:
+			self.l.setFont(0, gFont("Regular", 30))
+			self.l.setFont(1, gFont("Regular", 21))
+			self.l.setItemHeight(75)
+		else:
+			self.l.setFont(0, gFont("Regular", 20))
+			self.l.setFont(1, gFont("Regular", 14))
+			self.l.setItemHeight(50)
 
 class QuickMenuSubList(MenuList):
 	def __init__(self, sublist, enableWrapAround=True):
 		MenuList.__init__(self, sublist, enableWrapAround, eListboxPythonMultiContent)
-		self.l.setFont(0, gFont("Regular", 20))
-		self.l.setFont(1, gFont("Regular", 14))
-		self.l.setItemHeight(50)
+		screenwidth = getDesktop(0).size().width()
+		if screenwidth and screenwidth == 1920:
+			self.l.setFont(0, gFont("Regular", 30))
+			self.l.setFont(1, gFont("Regular", 21))
+			self.l.setItemHeight(75)
+		else:
+			self.l.setFont(0, gFont("Regular", 20))
+			self.l.setFont(1, gFont("Regular", 14))
+			self.l.setItemHeight(50)
 
 class QuickMenuDevices(Screen):
 	skin = """

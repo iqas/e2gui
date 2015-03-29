@@ -5,19 +5,18 @@ from Components.config import config, ConfigSubsection, ConfigBoolean, getConfig
 from Components.Network import iNetwork
 from Components.Ipkg import IpkgComponent
 from enigma import eDVBDB
-import os
+
 config.misc.installwizard = ConfigSubsection()
 config.misc.installwizard.hasnetwork = ConfigBoolean(default = False)
 config.misc.installwizard.ipkgloaded = ConfigBoolean(default = False)
 config.misc.installwizard.channellistdownloaded = ConfigBoolean(default = False)
-config.misc.installwizard.softcamdownloaded = ConfigBoolean(default = False)
 
 
 class InstallWizard(Screen, ConfigListScreen):
 
 	STATE_UPDATE = 0
 	STATE_CHOISE_CHANNELLIST = 1
- 	STATE_CHOISE_SOFTCAM = 2
+# 	STATE_CHOISE_SOFTCAM = 2
 
 	def __init__(self, session, args = None):
 		Screen.__init__(self, session)
@@ -46,14 +45,14 @@ class InstallWizard(Screen, ConfigListScreen):
 				self.createMenu()
 		elif self.index == self.STATE_CHOISE_CHANNELLIST:
 			self.enabled = ConfigYesNo(default = True)
-			modes = {"e2-astra-hispasat-iplus": "Open+ default(Astra-Hispasat)", "e2-astra-comunitarias-iplus": "Astra Comunitarias", "e2-astra-hotbird-hispasat-iplus": "Astra Hotbird Hispasat", "e2-motor-iplus": "All-Motor", "e2-cuatro-sat-19-13-28-23e-iplus": "Cuatro SAT" }
-			self.channellist_type = ConfigSelection(choices = modes, default = "e2-astra-hispasat-iplus")
+			modes = {"ATV": "ATV default(13e-19e)", "19e": "Astra 1", "23e": "Astra 3", "19e-23e": "Astra 1 Astra 3", "19e-23e-28e": "Astra 1 Astra 2 Astra 3", "13e-19e-23e-28e": "Astra 1 Astra 2 Astra 3 Hotbird"}
+			self.channellist_type = ConfigSelection(choices = modes, default = "ATV")
 			self.createMenu()
- 		elif self.index == self.STATE_CHOISE_SOFTCAM:
- 			self.enabled = ConfigYesNo(default = True)
- 			modes = {"oscam": _("default") + " (oscam)", "CCcam": "sbox"}
- 			self.softcam_type = ConfigSelection(choices = modes, default = "oscam")
- 			self.createMenu()
+# 		elif self.index == self.STATE_CHOISE_SOFTCAM:
+# 			self.enabled = ConfigYesNo(default = True)
+# 			modes = {"cccam": _("default") + " (CCcam)", "scam": "scam"}
+# 			self.softcam_type = ConfigSelection(choices = modes, default = "cccam")
+# 			self.createMenu()
 
 	def checkNetworkCB(self, data):
 		if data < 3:
@@ -81,10 +80,10 @@ class InstallWizard(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(_("Install channel list"), self.enabled))
 			if self.enabled.value:
 				self.list.append(getConfigListEntry(_("Channel list type"), self.channellist_type))
- 		elif self.index == self.STATE_CHOISE_SOFTCAM:
- 			self.list.append(getConfigListEntry(_("Install softcam"), self.enabled))
- 			if self.enabled.value:
- 				self.list.append(getConfigListEntry(_("Softcam type"), self.softcam_type))
+# 		elif self.index == self.STATE_CHOISE_SOFTCAM:
+# 			self.list.append(getConfigListEntry(_("Install softcam"), self.enabled))
+# 			if self.enabled.value:
+# 				self.list.append(getConfigListEntry(_("Softcam type"), self.softcam_type))
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -103,17 +102,11 @@ class InstallWizard(Screen, ConfigListScreen):
 	def run(self):
 		if self.index == self.STATE_UPDATE:
 			if config.misc.installwizard.hasnetwork.value:
-			        # Check if feed is active                                                                                                                  
-			        if not os.path.isfile("/etc/opkg/lbappstore.conf"):                                                                                        
-			                with open ('/etc/opkg/lbappstore.conf', 'a') as f: 
-			                        f.write ("src/gz lbutils http://appstore.linux-box.es/files" + '\n')
-			                        f.close()
-			                	                      
 				self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (updating packages)'), IpkgComponent.CMD_UPDATE)
-		elif self.index == self.STATE_CHOISE_CHANNELLIST and self.enabled.value:
-			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading channel list)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-settings-sorys-' + self.channellist_type.value})
- 		elif self.index == self.STATE_CHOISE_SOFTCAM and self.enabled.value:
- 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading softcam)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-lbcam-' + self.softcam_type.value})
+		elif self.index == self.STATE_CHOISE_CHANNELLIST and self.enabled.value and self.channellist_type.value != "ATV":
+			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading channel list)'), IpkgComponent.CMD_REMOVE, {'package': 'enigma2-plugin-settings-henksat-' + self.channellist_type.value})
+# 		elif self.index == self.STATE_CHOISE_SOFTCAM and self.enabled.value:
+# 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading softcam)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-softcams-' + self.softcam_type.value})
 		return
 
 
@@ -132,8 +125,6 @@ class InstallWizardIpkgUpdater(Screen):
 
 		if self.index == InstallWizard.STATE_CHOISE_CHANNELLIST:
 			self.ipkg.startCmd(cmd, {'package': 'enigma2-plugin-settings-*'})
-		elif self.index == InstallWizard.STATE_CHOISE_SOFTCAM:                                                                   
-                        self.ipkg.startCmd(cmd, {'package': 'enigma2-plugin-lbcam-*'})
 		else:
 			self.ipkg.startCmd(cmd, pkg)
 
@@ -150,11 +141,4 @@ class InstallWizardIpkgUpdater(Screen):
 					config.misc.installwizard.channellistdownloaded.value = True
 					eDVBDB.getInstance().reloadBouquets()
 					eDVBDB.getInstance().reloadServicelist()
-			elif self.index == InstallWizard.STATE_CHOISE_SOFTCAM:  
-			        if self.state == 0:                                                       
-                        	        self.ipkg.startCmd(IpkgComponent.CMD_INSTALL, self.pkg)                                            
-                        	        self.state = 1                                                                                     
-                        	        return
-                                else:
-                                        config.misc.installwizard.softcamdownloaded.value = True                                                        
 			self.close()

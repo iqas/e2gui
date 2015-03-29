@@ -12,7 +12,7 @@ POLLTIME = 5 # seconds
 
 def SymbolsCheck(session, **kwargs):
 		global symbolspoller, POLLTIME
-		if getBoxType() in ('ixussone', 'ixusszero'):
+		if getBoxType() in ('ixussone', 'ixusszero', 'nano', 'nanoc'):
 			POLLTIME = 1
 		symbolspoller = SymbolsCheckPoller(session)
 		symbolspoller.start()
@@ -21,6 +21,7 @@ class SymbolsCheckPoller:
 	def __init__(self, session):
 		self.session = session
 		self.blink = False
+		self.led = "0"
 		self.timer = eTimer()
 		self.onClose = []
 		self.__event_tracker = ServiceEventTracker(screen=self,eventmap=
@@ -64,7 +65,7 @@ class SymbolsCheckPoller:
 				open("/proc/stb/lcd/symbol_circle", "w").write("3")
 			else:
 				open("/proc/stb/lcd/symbol_circle", "w").write("0")
-		elif getBoxType() in ('mixosf5', 'mixoslumi', 'mixosf7', 'gi9196m'):
+		elif getBoxType() in ('mixosf5', 'mixoslumi', 'mixosf7', 'gi9196m', 'sf3038'):
 			recordings = len(NavigationInstance.instance.getRecordings())
 			if recordings > 0:
 				open("/proc/stb/lcd/symbol_recording", "w").write("1")
@@ -73,10 +74,27 @@ class SymbolsCheckPoller:
 		elif getBoxType() in ('ixussone', 'ixusszero'):
 			recordings = len(NavigationInstance.instance.getRecordings())
 			self.blink = not self.blink
-			if recordings > 0 and self.blink:
-				open("/proc/stb/lcd/powerled", "w").write("1")
-			else:
+			if recordings > 0:
+				if self.blink:
+					open("/proc/stb/lcd/powerled", "w").write("1")
+					self.led = "1"
+				else:
+					open("/proc/stb/lcd/powerled", "w").write("0")
+					self.led = "0"
+			elif self.led == "1":
 				open("/proc/stb/lcd/powerled", "w").write("0")
+		elif getBoxType() in ('nano', 'nanoc'):
+			recordings = len(NavigationInstance.instance.getRecordings())
+			self.blink = not self.blink
+			if recordings > 0:
+				if self.blink:
+					open("/proc/stb/lcd/powerled", "w").write("0")
+					self.led = "1"
+				else:
+					open("/proc/stb/lcd/powerled", "w").write("1")
+					self.led = "0"
+			elif self.led == "1":
+				open("/proc/stb/lcd/powerled", "w").write("1")
 
 		else:
 			if not fileExists("/proc/stb/lcd/symbol_recording") or not fileExists("/proc/stb/lcd/symbol_record_1") or not fileExists("/proc/stb/lcd/symbol_record_2"):
