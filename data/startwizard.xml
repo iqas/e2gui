@@ -131,6 +131,7 @@ self.selectKey("RIGHT")
 			</code>
 		</step>
  -->
+<!--
 		<step id="scanquestion">
 			<text value="Do you want to do a service scan?" />
 			<displaytext value="Do you want to do a service scan?" />
@@ -144,6 +145,7 @@ self.condition = nimmanager.somethingConnected() and not config.misc.installwiza
 				<listentry caption="Yes, do a manual scan now" step="manualscan" />
 			</list>
 		</step>
+-->
 		<step id="scan" nextstep="end">
 			<condition>
 from Components.NimManager import nimmanager
