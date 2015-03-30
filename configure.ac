@@ -651,6 +651,13 @@ lib/python/Plugins/SystemPlugins/LBpanel/libs/OscamInfo/locale/es/LC_MESSAGES/Ma
 lib/python/Plugins/SystemPlugins/LBpanel/script/Makefile
 lib/python/Plugins/SystemPlugins/LBpanel/script/libmem/Makefile
 lib/python/Plugins/SystemPlugins/LBpanel/templates/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/meta/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/LC_MESSAGES/Makefile
 po/Makefile
 main/Makefile
 tools/Makefile
