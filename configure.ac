@@ -624,7 +624,6 @@ lib/python/Plugins/SystemPlugins/WirelessLan/meta/Makefile
 lib/python/Plugins/SystemPlugins/SkinSelector/Makefile
 lib/python/Plugins/SystemPlugins/SkinSelector/meta/Makefile
 lib/python/Plugins/SystemPlugins/AnimationSetup/Makefile
-lib/python/Tools/Makefile
 lib/python/Plugins/SystemPlugins/LBpanel/Makefile
 lib/python/Plugins/SystemPlugins/LBpanel/meta/Makefile     
 lib/python/Plugins/SystemPlugins/LBpanel/Daemons/Makefile  
@@ -658,6 +657,7 @@ lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/LC_MESSAGES/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/LC_MESSAGES/Makefile
+lib/python/Tools/Makefile
 po/Makefile
 main/Makefile
 tools/Makefile
