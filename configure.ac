@@ -658,6 +658,7 @@ lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/es/LC_MESSAGES/Makefile
 lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/LC_MESSAGES/Makefile
+lib/python/Plugins/SystemPlugins/NumberZapExt/locale/ru/LC_MOSSAGES/Makefile
 po/Makefile
 main/Makefile
 tools/Makefile
