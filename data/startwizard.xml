@@ -145,7 +145,7 @@ self.condition = nimmanager.somethingConnected() and not config.misc.installwiza
 				<listentry caption="Yes, do a manual scan now" step="manualscan" />
 			</list>
 		</step>
--->
+
 		<step id="scan" nextstep="end">
 			<condition>
 from Components.NimManager import nimmanager
@@ -176,6 +176,7 @@ self.condition = nimmanager.somethingConnected() and not config.misc.installwiza
 				<listentry caption="Yes, do another manual scan now" step="manualscan" />
 			</list>
 		</step>
+-->
 <!--
 		<step id="finisheddefaultsatlists">
 			<text value="Do you want to enable the parental control feature on your %s %s?" />
