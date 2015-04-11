@@ -80,9 +80,9 @@ def skin_user_skinname():
 
 # example: loadSkin("nemesis_greenline/skin.xml")
 config.skin = ConfigSubsection()
-DEFAULT_SKIN = "openplusHD/skin.xml"
+DEFAULT_SKIN = "MetrixHD/skin.xml"
 if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
-	DEFAULT_SKIN = "MetrixHD/skin.xml"
+	DEFAULT_SKIN = "DMConcinnity-HD/skin.xml"
 if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
 	# in that case, fallback to Magic (which is an SD skin)
 	DEFAULT_SKIN = "skin.xml"
@@ -91,12 +91,6 @@ config.skin.primary_skin = ConfigText(default=DEFAULT_SKIN)
 DEFAULT_DISPLAY_SKIN = "skin_display.xml"
 config.skin.display_skin = ConfigText(default=DEFAULT_DISPLAY_SKIN)
 
-# Create etc/chipset for iplusHD
-if not os.path.isfile("/etc/chipset"):       
-        with open ('/etc/chipset', 'a') as f:
-		f.write ("7400")
-		f.close()
-                                        
 profile("LoadSkin")
 try:
 	name = skin_user_skinname()

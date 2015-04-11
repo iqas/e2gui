@@ -552,7 +552,7 @@ def InitUsageConfig():
 
 	crashlogheader = _("We are really sorry. Your receiver encountered " \
 					 "a software problem, and needs to be restarted.\n" \
-					 "Please send the logfile %senigma2_crash_xxxxxx.log to www.linux-box.es.\n" \
+					 "Please send the logfile %senigma2_crash_xxxxxx.log to www.opena.tv.\n" \
 					 "Your receiver restarts in 10 seconds!\n" \
 					 "Component: enigma2") % config.crash.debug_path.value
 	config.crash.debug_text = ConfigText(default=crashlogheader, fixed_size=False)
@@ -849,7 +849,7 @@ def InitUsageConfig():
 
 	config.oscaminfo = ConfigSubsection()
 	config.oscaminfo.showInExtensions = ConfigYesNo(default=False)
-	config.oscaminfo.userdatafromconf = ConfigYesNo(default = False)
+	config.oscaminfo.userdatafromconf = ConfigYesNo(default = True)
 	config.oscaminfo.autoupdate = ConfigYesNo(default = False)
 	config.oscaminfo.username = ConfigText(default = "username", fixed_size = False, visible_width=12)
 	config.oscaminfo.password = ConfigPassword(default = "password", fixed_size = False)

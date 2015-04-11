@@ -18,7 +18,7 @@
 
 /************************************************/
 
-#define CRASH_EMAILADDR "forum at www.linux-box.es"
+#define CRASH_EMAILADDR "forum at www.opena.tv"
 #define INFOFILE "/maintainer.info"
 
 #define RINGBUFFER_SIZE 16384

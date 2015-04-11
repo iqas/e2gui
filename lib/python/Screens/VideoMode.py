@@ -532,7 +532,7 @@ class AutoVideoMode(Screen):
 					else:
 						write_mode = config_mode+new_rate
 
-			# workaround for bug, see http://www.linux-box.es/forum/showthread.php?1642-Autoresolution-Plugin&p=38836&viewfull=1#post38836
+			# workaround for bug, see http://www.opena.tv/forum/showthread.php?1642-Autoresolution-Plugin&p=38836&viewfull=1#post38836
 			# always use a fixed resolution and frame rate   (e.g. 1080p50 if supported) for TV or .ts files
 			# always use a fixed resolution and correct rate (e.g. 1080p24/p50/p60 for all other videos
 			if config.av.smart1080p.value != 'false':
@@ -586,9 +586,46 @@ class AutoVideoMode(Screen):
 				if config.av.autores.value != "disabled" and config.av.autores_label_timeout.value != '0':
 					resolutionlabel.show()
 				print "[VideoMode] setMode - port: %s, mode: %s" % (config_port, write_mode)
-				f = open("/proc/stb/video/videomode", "w")
-				f.write(write_mode)
-				f.close()
+				# first we read now the real available values for every stb,
+				# before we try to write the new mode
+				changeResolution = False
+				try:
+					if path.exists("/proc/stb/video/videomode_choices"):
+						vf = open("/proc/stb/video/videomode_choices")
+						values = vf.readline().replace("\n", "").split(" ", -1)
+						for x in values:
+							if x == write_mode:
+								try:
+									f = open("/proc/stb/video/videomode", "w")
+									f.write(write_mode)
+									f.close()
+									changeResolution = True
+								except Exception, e:
+									print("[VideoMode] write_mode exception:" + str(e))
+
+						if not changeResolution:
+							print "[VideoMode] setMode - port: %s, mode: %s is not available" % (config_port, write_mode)
+							resolutionlabel["restxt"].setText(_("Video mode: %s is not available") % write_mode)
+							# we try to go for not available 1080p24 to change to 1080p from 60hz_choices if available
+							# TODO: can we make it easier, or more important --> smaller ?
+							# should we outsourced that way, like two new "def ..."
+							# or some other stuff, not like this?
+							if write_mode == "1080p24":
+								for x in values:
+									if x == "1080p":
+										try:
+											f = open("/proc/stb/video/videomode", "w")
+											f.write(x)
+											f.close()
+											changeResolution = True
+										except Exception, e:
+											print("[VideoMode] write_mode exception:" + str(e))
+								if not changeResolution:
+									print "[VideoMode] setMode - port: %s, mode: 1080p is also not available" % config_port
+									resolutionlabel["restxt"].setText(_("Video mode: 1080p is also not available"))
+						vf.close()
+				except Exception, e:
+					print("[VideoMode] read videomode_choices exception:" + str(e))
 
 		iAVSwitch.setAspect(config.av.aspect)
 		iAVSwitch.setWss(config.av.wss)

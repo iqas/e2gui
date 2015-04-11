@@ -261,7 +261,7 @@ class ImageBackup(Screen):
 		system('mv %s/vmlinux.gz %s/%s' %(self.WORKDIR, self.MAINDEST, self.KERNELBIN))
 		cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' %self.MAINDEST)
 
-		if self.MODEL in ("gbquad", "gbquadplus", "gb800ue", "gb800ueplus", "gbultraue"):
+		if self.MODEL in ("gbquad", "gbquadplus", "gb800ue", "gb800ueplus", "gbultraue", "nanopro"):
 			lcdwaitkey = '/usr/share/lcdwaitkey.bin'
 			lcdwarning = '/usr/share/lcdwarning.bin'
 			if path.exists(lcdwaitkey):
@@ -353,7 +353,7 @@ class ImageBackup(Screen):
 	def imageInfo(self):
 		AboutText = _("Full Image Backup ")
 		AboutText += _("By openATV Image Team") + "\n"
-		AboutText += _("Support at") + " www.linux-box.es\n\n"
+		AboutText += _("Support at") + " www.opena.tv\n\n"
 		AboutText += _("[Image Info]\n")
 		AboutText += _("Model: %s %s\n") % (getMachineBrand(), getMachineName())
 		AboutText += _("Backup Date: %s\n") % strftime("%Y-%m-%d", localtime(self.START))
