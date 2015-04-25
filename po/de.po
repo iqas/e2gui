@@ -5,16 +5,34 @@ msgstr ""
 "Project-Id-Version: tuxbox-enigma 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2015-04-09 11:19+0100\n"
-"Last-Translator: iPkay <iPkay@gmx.com>\n"
+"PO-Revision-Date: 2015-04-15 00:04+0100\n"
+"Last-Translator: mike99 <mike99@mail.to>\n"
 "Language-Team: openATV\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "Question"
+msgstr "Frage"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Video content: %ix%i%s %iHz"
+msgstr "Videoinhalt:  %ix%i%s %iHz"
+
+msgid "Video mode: %s not available"
+msgstr "Videomodus: %s nicht verfügbar"
+
+msgid "Video mode: 1080p also not available"
+msgstr "Videomodus: 1080p nicht verfügbar"
+
+msgid "Video mode: %s"
+msgstr "Videomodus: %s"
 
 msgid "Eventname only"
 msgstr "nur Sendungsname"
@@ -2168,11 +2186,11 @@ msgstr "Log Einstellungen"
 
 #
 msgid "Recording Setup"
-msgstr "Aufnahme-Einstellungen"
+msgstr "Aufnahme Einstellungen"
 
 #
 msgid "Timeshift Setup"
-msgstr "Timeshift-Einstellungen"
+msgstr "Timeshift Einstellungen"
 
 #
 msgid "CrashlogAutoSubmit"
@@ -3722,7 +3740,7 @@ msgstr "Festplatte "
 
 #
 msgid "Harddisk Setup"
-msgstr "Festplatten-Einstellungen"
+msgstr "Festplatten Einstellungen"
 
 #
 msgid "Hard disk standby after"
@@ -12707,8 +12725,11 @@ msgstr "Konfiguration Video"
 msgid "Setup your Video Mode, Video Output and other Video Settings"
 msgstr "Einstellungen Video Mode, Video Ausgang und andere Video-Einstellungen."
 
+msgid "Setup your Audio Mode"
+msgstr "Ton Einstellungen"
+
 msgid "Setup Tuner"
-msgstr "Tuner-Konfiguration"
+msgstr "Konfiguration Tuner"
 
 msgid "Setup your Tuner and search for channels"
 msgstr "Einstellungen Tuner und Kanalsuche."
@@ -12720,7 +12741,7 @@ msgid "Start/stop/select your cam, You need to install first a softcam"
 msgstr "Starten/Stopen/Auswahl der cams, Installation eines cams ist erforderlich."
 
 msgid "Update/Backup/Restore your box"
-msgstr "Update/Backup/Restore der Box."
+msgstr "Update/Backup/Restore der Box"
 
 msgid "Update/Backup your firmware, Backup/Restore settings"
 msgstr "Sichern/Wiederherstellen des Images oder der Einstellungen."
@@ -12729,7 +12750,7 @@ msgid "Download plugins"
 msgstr "Download Erweiterungen"
 
 msgid "Shows available pluigns. Here you can download and install them"
-msgstr "Zeige verfügbare Erweiterungen, Zum downloaden und Installieren."
+msgstr "Zeige verfügbare Erweiterungen, zum downloaden und installieren."
 
 msgid "Hard disk setup"
 msgstr "Konfiguration der HDD"
@@ -12924,7 +12945,10 @@ msgid "Manual scan for services"
 msgstr "Manueller Scan der Dienste"
 
 msgid "Search Sats"
-msgstr "Suche Sateliten, Pegelanzeige"
+msgstr "Suche Satelliten und Pegelanzeige"
+
+msgid "Search Sats, check signal and lock"
+msgstr "Suche Satelliten und Pegelanzeige"
 
 msgid "Setup each tuner for your satellite system"
 msgstr "Einstellungen für jeden Tuner"
@@ -13780,7 +13804,7 @@ msgid "Do you really want to delete this timer ?"
 msgstr "Timer wirklich löschen?"
 
 msgid "Software Manager Setup"
-msgstr "Update-Einstellungen"
+msgstr "Update Einstellungen"
 
 msgid "Manage your online update files"
 msgstr "Verwaltung Ihrer Online-Update Dateien"
@@ -14068,13 +14092,16 @@ msgid "Setup your LCD"
 msgstr "Einstellen des LCDs."
 
 msgid "LCD Skin Setup"
-msgstr "LCD Skin Auswahl"
+msgstr "Display Skinauswahl"
 
 msgid "Skin setup"
 msgstr "LCD Skin Auswahl"
 
 msgid "LCD scroll speed"
 msgstr "LCD Scollgeschwindigkeit"
+
+msgid "Setup your Skin"
+msgstr "Einstellen des Skin`s"
 
 msgid "Time for next LCD scrolling"
 msgstr "Zeit bis zum nächsten Scrollen des LCDs"
@@ -15268,3 +15295,7 @@ msgstr "SYS-Temp: %s"
 # MetrixHDSTBInfo.py
 msgid "RAM-Free: %s MB"
 msgstr "RAM-Frei: %s MB"
+
+# AudioSelection.py
+msgid "Switch between Audio-, Subtitlepage"
+msgstr "Umschalten zwischen Audio-, Untertitelauswahl"
