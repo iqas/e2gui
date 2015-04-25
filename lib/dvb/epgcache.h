@@ -42,6 +42,60 @@
 
 #define HILO(x) (x##_hi << 8 | x##_lo)
 
+#define MjdToEpochTime(x) (((x##_hi << 8 | x##_lo)-40587)*86400)
+#define BcdTimeToSeconds(x) ((3600 * ((10*((x##_h & 0xF0)>>4)) + (x##_h & 0xF))) + \
+                             (60 * ((10*((x##_m & 0xF0)>>4)) + (x##_m & 0xF))) + \
+                             ((10*((x##_s & 0xF0)>>4)) + (x##_s & 0xF)))
+
+#ifdef ENABLE_MHW_EPG
+
+#define FILE_EQUIV "/etc/mhw2equiv.conf"
+#define FILE_CHANNELS "/etc/mhw2chan.conf"
+#define FILE_LOG "/tmp/mhwlog.epg"
+
+#define EPG_REPLAY_LEN 8
+
+typedef struct epg_replay {
+   u_char channel_id                             :8;
+   u_char replay_mjd_hi                          :8;
+   u_char replay_mjd_lo                          :8;
+   u_char replay_time_h                          :8;
+   u_char replay_time_m                          :8;
+   u_char replay_time_s                          :8;
+   u_char reserv1				 :8;
+#if BYTE_ORDER == BIG_ENDIAN
+   u_char last                                   :1;
+   u_char                                        :1;
+   u_char vo                                     :1;
+   u_char vm                                     :1;
+   u_char                                        :3;
+   u_char subtitles                              :1;
+#else
+   u_char subtitles                              :1;
+   u_char                                        :3;
+   u_char vm                                     :1;
+   u_char vo                                     :1;
+   u_char                                        :1;
+   u_char last                                   :1;
+#endif
+} epg_replay_t;
+
+typedef struct {
+	u_char original_nid_hi;
+	u_char original_nid_lo;
+	u_char original_tid_hi;
+	u_char original_tid_lo;
+	u_char original_sid_hi;
+	u_char original_sid_lo;
+	u_char equiv_nid_hi;
+	u_char equiv_nid_lo;
+	u_char equiv_tid_hi;
+	u_char equiv_tid_lo;
+	u_char equiv_sid_hi;
+	u_char equiv_sid_lo;
+} mhw_channel_equiv_t;
+#endif
+
 class eventData;
 class eServiceReferenceDVB;
 class eDVBServicePMTHandler;
@@ -125,7 +179,7 @@ struct hash_uniqueEPGKey
 	#endif
 #endif
 
-#define descriptorPair std::pair<int,__u8*>
+#define descriptorPair std::pair<int,uint8_t*>
 #define descriptorMap std::map<uint32_t, descriptorPair >
 
 class eventData
@@ -230,6 +284,7 @@ class eEPGCache: public eMainloop, private eThread, public Object
 #endif
 #ifdef ENABLE_MHW_EPG
 		std::vector<mhw_channel_name_t> m_channels;
+		std::vector<mhw_channel_equiv_t> m_equiv;
 		std::map<uint8_t, mhw_theme_name_t> m_themes;
 		std::map<uint32_t, mhw_title_t> m_titles;
 		std::multimap<uint32_t, uint32_t> m_program_ids;
@@ -252,6 +307,11 @@ class eEPGCache: public eMainloop, private eThread, public Object
 		void timeMHW2DVB( int minutes, u_char *return_time);
 		void timeMHW2DVB( u_char day, u_char hours, u_char minutes, u_char *return_time);
 		void storeMHWTitle(std::map<uint32_t, mhw_title_t>::iterator itTitle, std::string sumText, const uint8_t *data);
+		void GetEquiv(void);
+		int nb_equiv;
+		bool log_open ();
+		void log_close();
+		void log_add (char *message, ...);
 #endif
 		void readData(const uint8_t *data, int source);
 		void startChannel();
@@ -310,6 +370,7 @@ private:
 
 	unsigned int enabledSources;
 	unsigned int historySeconds;
+	unsigned int maxdays;
 
 	std::vector<int> onid_blacklist;
 	eventCache eventDB;
@@ -345,7 +406,7 @@ private:
 #endif // SWIG
 public:
 	static eEPGCache *getInstance() { return instance; }
-
+	
 	void crossepgImportEPGv21(std::string dbroot);
 	void save();
 	void load();
@@ -431,6 +492,7 @@ public:
 #endif
 	,EPG_IMPORT=0x80000000
 	};
+	void setEpgmaxdays(unsigned int epgmaxdays);
 	void setEpgHistorySeconds(time_t seconds);
 	void setEpgSources(unsigned int mask);
 	unsigned int getEpgSources();
@@ -454,3 +516,4 @@ inline void eEPGCache::Unlock()
 #endif
 
 #endif
+                                        
