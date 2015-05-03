@@ -111,10 +111,10 @@ from Plugins.SystemPlugins.SoftwareManager.BackupRestore import BackupScreen, Re
 SystemInfo["SoftCam"] = Check_Softcam()
 
 # Hide Softcam-Panel Setup when no softcams installed
-if not Check_Softcam() and config.plugins.showinfopanelextensions.value:
-	config.plugins.showinfopanelextensions.value = False
-	config.plugins.showinfopanelextensions.save()
-	config.plugins.infopanel_redpanel.save()
+#if not Check_Softcam() and config.plugins.showinfopanelextensions.value:
+config.plugins.showinfopanelextensions.value = False
+config.plugins.showinfopanelextensions.save()
+config.plugins.infopanel_redpanel.save()
 
 # Hide Keymap selection when no other keymaps installed.
 if config.usage.keymap.value != eEnv.resolve("${datadir}/enigma2/keymap.xml"):
@@ -212,13 +212,13 @@ def Plugins(**kwargs):
 	return [
 
 	#// show Infopanel in Main Menu
-	PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_MENU, fnc = Apanel),
+	#PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_MENU, fnc = Apanel),
 	#// autostart
 	PluginDescriptor(where = [PluginDescriptor.WHERE_SESSIONSTART,PluginDescriptor.WHERE_AUTOSTART],fnc = camstart),
 	#// SwapAutostart
 	PluginDescriptor(where = [PluginDescriptor.WHERE_SESSIONSTART,PluginDescriptor.WHERE_AUTOSTART],fnc = SwapAutostart),
 	#// show Infopanel in EXTENSIONS Menu
-	PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_EXTENSIONSMENU, fnc = main) ]
+	#PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_EXTENSIONSMENU, fnc = main) ]
 
 
 
