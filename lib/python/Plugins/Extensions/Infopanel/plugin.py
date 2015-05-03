@@ -218,7 +218,8 @@ def Plugins(**kwargs):
 	#// SwapAutostart
 	PluginDescriptor(where = [PluginDescriptor.WHERE_SESSIONSTART,PluginDescriptor.WHERE_AUTOSTART],fnc = SwapAutostart),
 	#// show Infopanel in EXTENSIONS Menu
-	#PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_EXTENSIONSMENU, fnc = main) ]
+	#PluginDescriptor(name="Info Panel", description="Info panel GUI 27/12/2013", where = PluginDescriptor.WHERE_EXTENSIONSMENU, fnc = main) 
+	]
 
 
 
