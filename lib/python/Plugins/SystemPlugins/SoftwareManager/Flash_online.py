@@ -27,20 +27,20 @@ if getMachineBrand() == "Vu+":
 	ImageVersion3= os.popen("cat /etc/opkg/mips32el-feed.conf | grep -o -e 4.2gl -e 4.2-old").read().rstrip()
 
 #############################################################################################################
-image = 0 # 0=openATV / 1=openMips
+image = 0 # 0=openplus / 1=openMips
 if distro.lower() == "openmips":
 	image = 1
-elif distro.lower() == "openatv":
+elif distro.lower() == "openplus":
 	image = 0
 if ImageVersion3 == '':
-	feedurl_atv = 'http://images.mynonpublic.com/openatv/%s' %ImageVersion
+	feedurl_atv = 'http://feeds.linux-box.es/openplus/%s' %ImageVersion
 else:
-	feedurl_atv = 'http://images2.mynonpublic.com/openatv/%s' %ImageVersion3
+	feedurl_atv = 'http://images2.mynonpublic.com/openplus/%s' %ImageVersion3
 if ImageVersion == '4.1' or ImageVersion == '4.0' or ImageVersion == '3.0' or ImageVersion == '4.3':
 	ImageVersion2= '4.2'
 else:
 	ImageVersion2= '5.0'
-feedurl_atv2= 'http://images.mynonpublic.com/openatv/%s' %ImageVersion2
+feedurl_atv2= 'http://feeds.linux-box.es/openplus/%s' %ImageVersion2
 feedurl_om = 'http://image.openmips.com/4.2'
 imagePath = '/media/hdd/images'
 flashPath = '/media/hdd/images/flash'
@@ -520,7 +520,7 @@ class doFlashImage(Screen):
 					self["key_blue"].setText("openMIPS")
 				else:
 					self.feedurl = feedurl_om
-					self["key_blue"].setText("openATV")
+					self["key_blue"].setText("openplus")
 			else:
 				if self.feed == "atv":
 					self.feedurl = feedurl_atv

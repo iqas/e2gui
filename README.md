@@ -2,13 +2,13 @@
 
 > Ubuntu 12.04.5 LTS (GNU/Linux 3.2.13-grsec-xxxx-grs-ipv6-64 x86_64)
 
-## openATV is build using oe-alliance build-environment and several git repositories: ##
+## openplus is build using oe-alliance build-environment and several git repositories: ##
 
 > [https://github.com/oe-alliance/oe-alliance-core](https://github.com/oe-alliance/oe-alliance-core "OE-Alliance")
 > 
-> [https://github.com/openatv/enigma2](https://github.com/openatv/enigma2 "openATV E2")
+> [https://github.com/Linux-Box/lbgui.git](https://github.com/Linux-Box/lbgui.git "openplus E2")
 > 
-> [https://github.com/openatv/MetrixHD](https://github.com/openatv/MetrixHD "openATV Skin")
+> [https://github.com/Linux-Box/MetrixHD.gi](https://github.com/Linux-Box/MetrixHD.gi "openplus Skin")
 
 > and a lot more...
 
@@ -29,29 +29,29 @@
     select "NO"
 
 ----------
-3 - Add user openatvbuilder
+3 - Add user openplusbuilder
 
-    sudo adduser openatvbuilder
-
-----------
-4 - Switch to user openatvbuilder
-
-    su openatvbuilder
+    sudo adduser openplusbuilder
 
 ----------
-5 - Switch to home of openatvbuilder
+4 - Switch to user openplusbuilder
+
+    su openplusbuilder
+
+----------
+5 - Switch to home of openplusbuilder
 
     cd ~
 
 ----------
-6 - Create folder openatv
+6 - Create folder openplus
 
-    mkdir -p ~/openatv
+    mkdir -p ~/openplus
 
 ----------
-7 - Switch to folder openatv
+7 - Switch to folder openplus
 
-    cd openatv
+    cd openplus
 
 ----------
 8 - Clone oe-alliance git
@@ -71,4 +71,4 @@
 ----------
 11 - Finally you can start building a image
 
-    make MACHINE=gbquadplus DISTRO=openatv image
+    make MACHINE=gbquadplus DISTRO=openplus image

@@ -1542,20 +1542,20 @@ class UpdatePlugin(Screen):
 		# TODO: Use Twisted's URL fetcher, urlopen is evil. And it can
 		# run in parallel to the package update.
 		try:
-			urlopenATV = "http://ampel.mynonpublic.com/Ampel/index.php"
-			d = urlopen(urlopenATV)
+			urlopenplus = "http://ampel.mynonpublic.com/Ampel/index.php"
+			d = urlopen(urlopenplus)
 			tmpStatus = d.read()
 			if (os.path.exists("/etc/.beta") and 'rot.png' in tmpStatus) or 'gelb.png' in tmpStatus:
-				message = _("Caution update not yet tested !!") + "\n" + _("Update at your own risk") + "\n\n" + _("For more information see http://www.opena.tv") + "\n\n"# + _("Last Status Date") + ": "  + statusDate + "\n\n"
+				message = _("Caution update not yet tested !!") + "\n" + _("Update at your own risk") + "\n\n" + _("For more information see http://www.linux-box.es") + "\n\n"# + _("Last Status Date") + ": "  + statusDate + "\n\n"
 				picon = MessageBox.TYPE_ERROR
 				default = False
 			elif 'rot.png' in tmpStatus:
-				message = _("Update is reported as faulty !!") + "\n" + _("Aborting updateprogress") + "\n\n" + _("For more information see http://www.opena.tv")# + "\n\n" + _("Last Status Date") + ": " + statusDate
+				message = _("Update is reported as faulty !!") + "\n" + _("Aborting updateprogress") + "\n\n" + _("For more information see http://www.linux-box.es")# + "\n\n" + _("Last Status Date") + ": " + statusDate
 				picon = MessageBox.TYPE_ERROR
 				default = False
 				doUpdate = False
 		except:
-			message = _("The status of the current update could not be checked because http://www.opena.tv could not be reached for some reason") + "\n"
+			message = _("The status of the current update could not be checked because http://www.linux-box.es could not be reached for some reason") + "\n"
 			picon = MessageBox.TYPE_ERROR
 			default = False
 		socket.setdefaulttimeout(currentTimeoutDefault)

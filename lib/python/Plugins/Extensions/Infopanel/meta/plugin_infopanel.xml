@@ -3,7 +3,7 @@
 		<tag type="System" />
 	</prerequisites>
 	<info>
-		<author>openATV TEAM</author>
+		<author>openplus TEAM</author>
 		<name>INFOPANEL</name>
 		<packagename>enigma2-plugin-extensions-infopanel</packagename>
 		<shortdescription>Control panel</shortdescription>
