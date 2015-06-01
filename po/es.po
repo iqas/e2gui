@@ -5,9 +5,9 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2015-05-21 18:38+0100\n"
-"Last-Translator: Joan González <joan@gonzalezcrego.es>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2015-06-01 16:14+0100\n"
+"Last-Translator: Joan González, www.linux-box.es\n"
+"Language-Team: Team Linux-box <www.linux-box.es>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8138,7 +8138,11 @@ msgstr "Sistema:"
 #
 #. TRANSLATORS: Add here whatever should be shown in the "translator" about screen, up to 6 lines (use \n for newline)
 msgid "TRANSLATOR_INFO"
-msgstr "Translated by: www.gonzalezcrego.es"
+msgstr "Traducido por: Joan González, joan@gonzalezcrego.es"
+
+#
+msgid "Translation Information"
+msgstr "Información de Traducciones"
 
 #
 msgid "TS file is too large for ISO9660 level 1!"
