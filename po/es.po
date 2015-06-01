@@ -1,4 +1,4 @@
-# German translations for Enigma2.
+# Spanish translations for Enigma2.
 #
 msgid ""
 msgstr ""
