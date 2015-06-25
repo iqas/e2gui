@@ -20,7 +20,9 @@ boxtype = getBoxType()
 
 if os.path.isfile("/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/plugin.pyo") and boxtype in ('dm7080','dm820'):
 	import pyo_patcher
-
+if not os.path.isfile("/etc/cghipset"):
+	os.system('echo "7400" > /etc/chipset');
+	
 from traceback import print_exc
 profile("SimpleSummary")
 from Screens import InfoBar

@@ -9327,7 +9327,7 @@ msgstr ""
 
 #
 msgid ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.opena.tv.\n"
+"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.linux-box.es.\n"
 "Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
 msgstr ""
 
@@ -11634,10 +11634,10 @@ msgstr ""
 msgid "Update at your own risk"
 msgstr ""
 
-msgid "For more information see http://www.opena.tv"
+msgid "For more information see http://www.linux-box.es"
 msgstr ""
 
-msgid "The status of the current update could not be checked because http://www.opena.tv could not be reached for some reason"
+msgid "The status of the current update could not be checked because http://www.linux-box.es could not be reached for some reason"
 msgstr ""
 
 msgid "Do you want to update your box?"
@@ -14384,7 +14384,7 @@ msgstr ""
 #: BSOD
 msgid ""
 "We are really sorry. Your receiver encountered a software problem, and needs to be restarted.\n"
-"Please send the logfile %senigma2_crash_xxxxxx.log to www.opena.tv.\n"
+"Please send the logfile %senigma2_crash_xxxxxx.log to www.linux-box.es.\n"
 "Your receiver restarts in 10 seconds!\n"
 "Component: enigma2"
 msgstr ""
