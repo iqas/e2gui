@@ -1,74 +1,27 @@
-## Our buildserver is currently running on: ##
+OpenPlus Gui - Enigma2 based
 
-> Ubuntu 12.04.5 LTS (GNU/Linux 3.2.13-grsec-xxxx-grs-ipv6-64 x86_64)
+Openplus en un firmware para decodificadores de TV (TDT/SAT/CABLE) basado en el software de código abierto Enigma2.
 
-## openplus is build using oe-alliance build-environment and several git repositories: ##
+Como novedades en esta versión, podemos citar:
 
-> [https://github.com/oe-alliance/oe-alliance-core](https://github.com/oe-alliance/oe-alliance-core "OE-Alliance")
-> 
-> [https://github.com/Linux-Box/lbgui.git](https://github.com/Linux-Box/lbgui.git "openplus E2")
-> 
-> [https://github.com/Linux-Box/MetrixHD.gi](https://github.com/Linux-Box/MetrixHD.gi "openplus Skin")
-
-> and a lot more...
+ - Skin Openplus como piel por defecto.
+ - Skin optativo Metrix-lb basado en el skin del mismo nombre y adaptado por Villak
+ - LbPanel (Versión específica para openplus
+ - Traducido al español en un 98%
+ - Incluidos los últimos drivers de los fabricantes
 
 
-----------
+OPENPLUS está basada en código opensource de enigma2 de publicado por OpenAtv y otros autores.
+Esta imagen no contiene claves, emuladores u otros sistemas que permitan el visionado sin una subscripción de pago
 
-# Building Instructions #
+Openplus está constituida por un conjunto de software de múltiples autores con licencias variadas que se pueden consultar en cada paquete.
+Todo el código generado por el equipo de Linux-Box, se ha licenciado bajo GPL.
+Tal como se indica en la licencia este software se entrega sin ninguna garantía.
 
-1 - Install packages on your buildserver
+AGRADECIMIENTOS
 
-    sudo apt-get install -y autoconf automake bison bzip2 chrpath coreutils cvs default-jre default-jre-headless diffstat flex g++ gawk gcc gettext git-core gzip help2man htop info java-common libc6-dev libglib2.0-dev libperl4-corelibs-perl libproc-processtable-perl libtool libxml2-utils make ncdu ncurses-bin ncurses-dev patch perl pkg-config po4a python-setuptools quilt sgmltools-lite sshpass subversion swig tar texi2html texinfo wget xsltproc zip zlib1g-dev
-
-----------
-2 - Set your shell to /bin/bash.
-
-    sudo dpkg-reconfigure dash
-    When asked: Install dash as /bin/sh?
-    select "NO"
-
-----------
-3 - Add user openplusbuilder
-
-    sudo adduser openplusbuilder
-
-----------
-4 - Switch to user openplusbuilder
-
-    su openplusbuilder
-
-----------
-5 - Switch to home of openplusbuilder
-
-    cd ~
-
-----------
-6 - Create folder openplus
-
-    mkdir -p ~/openplus
-
-----------
-7 - Switch to folder openplus
-
-    cd openplus
-
-----------
-8 - Clone oe-alliance git
-
-    git clone git://github.com/oe-alliance/build-enviroment.git
-
-----------
-9 - Switch to folder build-enviroment
-
-    cd build-enviroment
-
-----------
-10 - Update build-enviroment
-
-    make update
-
-----------
-11 - Finally you can start building a image
-
-    make MACHINE=gbquadplus DISTRO=openplus image
+Gracias al equipo de OpenAtv por todo el desarrollo de múltiple código
+Gracias  al equipo de OpenSpa por el desarrollo del código del epg de 7 días
+Gracias a Тайна го por el código implementado en Openplus
+Gracias a siteincloud.com por el alojamiento del foro y los feeds
+Gracias a todos los betatesters de openplus
