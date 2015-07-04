@@ -8,7 +8,7 @@ self.clearSelectedKeys()
 self.selectKey("OK")
 			</code>
 		</step>
-		<step id="introduction" >
+		<step id="introduction" nextstep="network" >
 			<text value="Use the up/down keys on your remote control to select an option. After that, press OK." />
 			<displaytext value="Use the up/down keys on your remote control to select an option. After that, press OK." />
 			<list>
@@ -115,11 +115,16 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
-<!--
-		<step id="channels">
+
+		<step id="channels" nextstep="end">
 			<condition>
 from Components.NimManager import nimmanager
-self.condition = nimmanager.somethingConnected() and config.misc.installwizard.hasnetwork.value and config.misc.installwizard.ipkgloaded.value
+self.condition = nimmanager.somethingConnected()  
+<!--
+self.condition = nimmanager.somethingConnected() and
+config.misc.installwizard.hasnetwork.value and
+config.misc.installwizard.ipkgloaded.value
+-->
 			</condition>
 			<text value="Do you want to install a channel list?" />
 			<displaytext value="Do you want to install a channel list?" />
@@ -130,7 +135,7 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
- -->
+
 		<step id="scanquestion">
 			<text value="Do you want to do a service scan?" />
 			<displaytext value="Do you want to do a service scan?" />
@@ -139,7 +144,8 @@ from Components.NimManager import nimmanager
 self.condition = nimmanager.somethingConnected() and not config.misc.installwizard.channellistdownloaded.value
 			</condition>
 			<list>
-				<listentry caption="No, scan later manually" step="end" />
+				<listentry caption="No, scan later manually"
+				step="channels" />
 				<listentry caption="Yes, do an automatic scan now" step="scan" />
 				<listentry caption="Yes, do a manual scan now" step="manualscan" />
 			</list>
