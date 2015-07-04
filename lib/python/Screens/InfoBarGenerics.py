@@ -3464,7 +3464,8 @@ class InfoBarINFOpanel:
 				from Plugins.Extensions.Infopanel.plugin import Infopanel
 				self.session.open(Infopanel, services = self.servicelist)
 			elif config.plugins.infopanel_redpanel.selectionLong.value == '2':
-				self.session.open(TimerEditList)
+				from Plugins.SystemPlugins.LBpanel.plugin import LBCamEmu
+				self.session.open(LBCamEmu.emuSel2)
 			elif config.plugins.infopanel_redpanel.selectionLong.value == '3':
 				self.showMovies()
 			elif config.plugins.infopanel_redpanel.selectionLong.value == '4':
