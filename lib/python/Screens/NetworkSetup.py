@@ -30,7 +30,7 @@ from Tools.LoadPixmap import LoadPixmap
 from Plugins.Plugin import PluginDescriptor
 from subprocess import call
 import commands
-
+import os.path
 
 basegroup = "packagegroup-base"
 
@@ -2112,6 +2112,8 @@ class NetworkNfs(Screen):
 			self['labactive'].setText(_("Enabled"))
 			self['labactive'].show()
 			self.my_nfs_active = True
+			if not os.path.isfile("/etc/exports"):
+			        os.system('echo "/media/hdd/ *(ro,sync)\n" > /etc/exports');
 		if nfs_process:
 			self.my_nfs_run = True
 		if self.my_nfs_run:
@@ -2557,7 +2559,7 @@ class NetworkSamba(Screen):
 	def updateService(self):
 		import process		
 		p = process.ProcessList()		
-		samba_process = str(p.named('smbd')).strip('[]')
+		samba_process = str(p.named('nmbd')).strip('[]')
 		self['labrun'].hide()
 		self['labstop'].hide()
 		self['labactive'].setText(_("Disabled"))
