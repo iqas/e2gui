@@ -2151,7 +2151,7 @@ class RemoteTunerServer(Screen):
 		self.my_rts_active = False
 		self.my_rts_run = False
 		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.close, 'back': self.close, 'red': self.UninstallCheck, 'green': self.RemoteTunerServerStartStop, 'yellow': self.RemoteTunerServerSet})
-		self.service_name = 'remotetunerserver'
+		self.service_name = 'enigma2-plugin-extensions-tunerserver'
 		self.onLayoutFinish.append(self.InstallCheck)
 
 	def InstallCheck(self):

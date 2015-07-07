@@ -4929,10 +4929,6 @@ msgid "Mkfs failed"
 msgstr "Mkfs fallido"
 
 #
-msgid "Mode"
-msgstr "Modo"
-
-#
 msgid "Mode "
 msgstr "Modo "
 
@@ -14787,7 +14783,7 @@ msgstr "Grabación real"
 msgid "real recordings or streaming"
 msgstr "Grabación real o streaming"
 
-msgid ""real or pseudo recordings"
+msgid "real or pseudo recordings"
 msgstr "Grabación real o pseudo"
 
 msgid ""
