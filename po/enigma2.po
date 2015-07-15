@@ -170,7 +170,7 @@ msgid " extensions."
 msgstr ""
 
 msgid ""
-" has been sent to the AAF beta team.\n"
+" has been sent to the Linux-Box team.\n"
 "please quote "
 msgstr ""
 
@@ -1343,7 +1343,7 @@ msgstr ""
 msgid "Button setup"
 msgstr ""
 
-msgid "By openATV Image Team"
+msgid "By Linux-Box Team"
 msgstr ""
 
 #
@@ -3331,7 +3331,7 @@ msgstr ""
 msgid "Following tasks will be done after you press OK!"
 msgstr ""
 
-msgid "For more information see www.openpli.org"
+msgid "For more information see www.linux-box.es"
 msgstr ""
 
 #
@@ -7793,7 +7793,7 @@ msgstr ""
 msgid "The sleep timer has been disabled."
 msgstr ""
 
-msgid "The status of the current beta image could not be checked because www.openpli.org could not be reached for some reason"
+msgid "The status of the current beta image could not be checked because www.linux-box.es could not be reached for some reason"
 msgstr ""
 
 #

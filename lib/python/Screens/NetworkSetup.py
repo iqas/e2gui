@@ -2151,7 +2151,7 @@ class RemoteTunerServer(Screen):
 		self.my_rts_active = False
 		self.my_rts_run = False
 		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.close, 'back': self.close, 'red': self.UninstallCheck, 'green': self.RemoteTunerServerStartStop, 'yellow': self.RemoteTunerServerSet})
-		self.service_name = 'enigma2-plugin-extensions-tunerserver'
+		self.service_name = 'enigma2-plugin-extensions-lbtunerserver'
 		self.onLayoutFinish.append(self.InstallCheck)
 
 	def InstallCheck(self):
@@ -2198,6 +2198,7 @@ class RemoteTunerServer(Screen):
 		print "doInstall " ,callback, pkgname
 		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
 		self.message.setTitle(_('Installing Service'))
+		self.Console.ePopen('/usr/bin/opkg install xupnpd')
 		self.Console.ePopen('/usr/bin/opkg install ' + pkgname, callback)
 
 	def installComplete(self,result = None, retval = None, extra_args = None):
@@ -2230,30 +2231,30 @@ class RemoteTunerServer(Screen):
 
 	def RemoteTunerServerStartStop(self):
 		if not self.my_rts_run:
-			self.Console.ePopen('/etc/init.d/ddserver start', self.StartStopCallback)
+			self.Console.ePopen('/etc/init.d/xupnpd start', self.StartStopCallback)
 		elif self.my_rts_run:
-			self.Console.ePopen('/etc/init.d/ddserver stop', self.StartStopCallback)
+			self.Console.ePopen('/etc/init.d/xupnpd stop', self.StartStopCallback)
 
 	def StartStopCallback(self, result = None, retval = None, extra_args = None):
 		time.sleep(3)
 		self.updateService()
 
 	def RemoteTunerServerSet(self):
-		if fileExists('/etc/rc2.d/S11ddserver'):
-			self.Console.ePopen('update-rc.d -f ddserver remove', self.StartStopCallback)
+		if fileExists('/etc/rc2.d/S11xupnpd'):
+			self.Console.ePopen('update-rc.d -f xupnpd remove', self.StartStopCallback)
 		else:
-			self.Console.ePopen('update-rc.d -f ddserver defaults 11', self.StartStopCallback)
+			self.Console.ePopen('update-rc.d -f xupnpd defaults 11', self.StartStopCallback)
 
 	def updateService(self):
 		import process
 		p = process.ProcessList()
-		rts_process = str(p.named('dd_server')).strip('[]')
+		rts_process = str(p.named('xupnpd')).strip('[]')
 		self['labrun'].hide()
 		self['labstop'].hide()
 		self['labactive'].setText(_("Disabled"))
 		self.my_rts_active = False
 		self.my_rts_run = False
-		if fileExists('/etc/rc2.d/S11ddserver'):
+		if fileExists('/etc/rc2.d/S11xupnpd'):
 			self['labactive'].setText(_("Enabled"))
 			self['labactive'].show()
 			self.my_rts_active = True

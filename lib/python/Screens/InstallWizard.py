@@ -45,8 +45,8 @@ class InstallWizard(Screen, ConfigListScreen):
 				self.createMenu()
 		elif self.index == self.STATE_CHOISE_CHANNELLIST:
 			self.enabled = ConfigYesNo(default = True)
-			modes = {"astrahotbird": "Astra-Hotbird", "19e": "Astra 1", "astrahispasat": "Astra-Hispasat", "astrahotbirdhispasat": "Astra-Hotbird-Hispasat", "motor": "Motor"}
-			self.channellist_type = ConfigSelection(choices = modes, default = "astrahotbird")
+			modes = {"19e.iplus": "Astra", "19e.13e.iplus": "Astra-Hotbird", "19e.com.iplus": "Astra Comunitarias", "motor.iplus": "Motor", "19e.30w.iplus": "Astra-Hispasat"}
+			self.channellist_type = ConfigSelection(choices = modes, default = "19e.iplus")
 			self.createMenu()
 # 		elif self.index == self.STATE_CHOISE_SOFTCAM:
 # 			self.enabled = ConfigYesNo(default = True)
