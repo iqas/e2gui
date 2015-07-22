@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2015-07-08 18:30+0200\n"
+"PO-Revision-Date: 2015-07-21 21:40+0200\n"
 "Last-Translator: Joan González - Jglez3 <joan@gonzalezcrego.es>\n"
 "Language-Team: Team Linux-box <www.linux-box.es>\n"
 "Language: es\n"
@@ -3601,7 +3601,7 @@ msgstr ""
 
 #
 msgid "Filesystem Check"
-msgstr "Comprobar sistema de ficheros"
+msgstr "Comprobar sistema de archivos"
 
 #
 msgid "Filesystem contains uncorrectable errors"
@@ -6539,7 +6539,7 @@ msgstr "Volver a introducir el nuevo PIN"
 
 #
 msgid "Refresh rate"
-msgstr "Velocidad de actualización"
+msgstr "Velocidad de refresco"
 
 msgid "Refresh every (in hours)"
 msgstr "Actualizar cada (horas)"
@@ -6549,7 +6549,7 @@ msgstr "Tu %s %s lee los datos guardados en EPG cada (horas)."
 
 #
 msgid "Refresh rate selection."
-msgstr "Selección de velocidad de actualización."
+msgstr "Selección de velocidad de refresco."
 
 msgid "Release"
 msgstr "Publicación"
@@ -7279,7 +7279,7 @@ msgstr "Seleccionar proveedor a añadir..."
 
 #
 msgid "Select refresh rate"
-msgstr "Seleccionar la velocidad de actualización"
+msgstr "Seleccionar la velocidad de refresco"
 
 #
 msgid "Select service to add..."
@@ -8915,7 +8915,7 @@ msgid "This option configures the screen aspect ratio."
 msgstr "Esta opción configura el aspecto de la pantalla."
 
 msgid "Configure the refresh rate of the screen."
-msgstr "Configurar la velocidad de actualización de la pantalla."
+msgstr "Configurar la velocidad de refresco de la pantalla."
 
 msgid "This option configures the screen resolution in PC output mode."
 msgstr "Esta opción configura la resolución de pantalla en modo salida PC."
@@ -12576,7 +12576,7 @@ msgstr ""
 
 #
 msgid "because of the used filesystem the back-up\n"
-msgstr "debido al sistema de ficheros de la copia de seguridad\n"
+msgstr "debido al sistema de archivos de la copia de seguridad\n"
 
 #
 msgid "will take about 3-12 minutes for this system\n"
@@ -13258,8 +13258,7 @@ msgid "Channel selection on mode change"
 msgstr "Selección de canales en modo de cambio"
 
 msgid "Show PVR status in MoviePlayer infobar"
-msgstr ""
-"Mostrar estado PVR en la barra de info del reproductor de películas"
+msgstr "Mostrar estado PVR en la barra de info del reproductor de películas"
 
 # /data/setup.xml
 msgid "Close PiP on exit"
@@ -15961,9 +15960,6 @@ msgstr "Pulsa OK para establecer la dirección MAC."
 msgid "Press OK to set the MAC-address."
 msgstr "Pulsa OK para establecer la dirección MAC."
 
-
-
-
 #
 msgid "Storage devices"
 msgstr "Dispositivos de almacenamiento"
@@ -16443,7 +16439,6 @@ msgid ""
 "Please send the logfile %senigma2_crash_xxxxxx.log to www.linux-box.es.\n"
 "Your receiver restarts in 10 seconds!\n"
 "Component: enigma2"
-
 msgstr ""
 "Lo sentimos. Tu receptor ha sufrido un "
 "problema de software y necesita reiniciarse.\n"
