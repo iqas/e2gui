@@ -1019,6 +1019,8 @@ RESULT eDVBResourceManager::allocateDemux(eDVBRegisteredFrontend *fe, ePtr<eDVBA
 			}
 			else
 			{
+				if (i == m_demux.begin())
+					break;
 				--i;
 			}
 		}
