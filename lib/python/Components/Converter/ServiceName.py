@@ -35,7 +35,8 @@ class ServiceName(Converter, object):
 
 	@cached
 	def getText(self):
-		service = self.source.service
+	   try:
+	   	service = self.source.service
 		info = None
 		if isinstance(service, eServiceReference):
 			info = self.source.info
@@ -51,11 +52,6 @@ class ServiceName(Converter, object):
 			if name is None:
 				name = info.getName()
 			name = name.replace('\xc2\x86', '').replace('\xc2\x87', '')
-			try:
-				tmpch = self.source.serviceref.toString()
-			except:
-				self.source.serviceref=""
-				tmpch=""
 			if self.type == self.NAME_EVENT:
 				act_event = info and info.getEvent(0)
 				if not act_event and info:
@@ -65,7 +61,7 @@ class ServiceName(Converter, object):
 					return "%s - " % name
 				else:
 					return "%s - %s" % (name, act_event.getEventName())
-			elif self.type != self.NAME_ONLY and config.usage.show_infobar_channel_number.value and hasattr(self.source, "serviceref") and '0:0:0:0:0:0:0:0:0' not in tmp_ch:
+			elif self.type != self.NAME_ONLY and config.usage.show_infobar_channel_number.value and hasattr(self.source, "serviceref") and '0:0:0:0:0:0:0:0:0' not in self.source.serviceref.toString():
 				numservice = self.source.serviceref
 				num = numservice and numservice.getChannelNum() or None
 				if num is not None:
@@ -103,9 +99,12 @@ class ServiceName(Converter, object):
 					return tmpref
 			else:
 				return 'N/A'			
-
+	   except:
+	   	return 'N/A'
+	   	
 	text = property(getText)
 
 	def changed(self, what):
 		if what[0] != self.CHANGED_SPECIFIC or what[1] in (iPlayableService.evStart,):
 			Converter.changed(self, what)
+
