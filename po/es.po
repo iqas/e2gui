@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2015-08-01 19:00+0200\n"
+"PO-Revision-Date: 2015-09-10 01:33+0200\n"
 "Last-Translator: Joan González - Jglez3 <joan@gonzalezcrego.es>\n"
 "Language-Team: Team Linux-box <www.linux-box.es>\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.3\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Stop recording now"
@@ -17213,66 +17213,5 @@ msgstr "Deslizar de arriba a abajo"
 msgid "Stripes"
 msgstr "Rayas"
 
-# LBTunerServer
-msgid "Allow Streaming From Box Tuners"
-msgstr "Permitir streaming de sintonizadores"
-
-# LBTunerServer
-msgid "Build Complete!"
-msgstr "¡Construcción completada!"
-
-# LBTunerServer
-msgid "Build Server"
-msgstr "Construir servidor"
-
-# LBTunerServer
-msgid "Disable Server"
-msgstr "Desactivar servidor"
-
-# LBTunerServer
-msgid "Server Disabled"
-msgstr "Servidor desactivado"
-
-# LBTunerServer
-msgid "Server Enabled"
-msgstr "Servidor activado"
-
-# LBTunerServer
-msgid "Server now disabled!"
-msgstr "¡El servidor está desactivado!"
-
-# LBTunerServer
-msgid "Sorry, but you need to have a device mounted at '/media/hd'"
-msgstr "Lo siento, pero necesitas tener montado '/media/hdd'"
-
-# LBTunerServer
-msgid "Sorry, but you need to have a device mounted at '/media/usb'"
-msgstr "Lo siento, pero necesitas tener montado '/media/usb'"
-
-# LBTunerServer
-msgid "Tuner Server"
-msgstr "Sintonizador remoto"
-
-# LBTunerServer
-msgid "Tuner Server Disabled."
-msgstr "Sintonizador remoto desactivado."
-
-# LBTunerServer
-msgid "Tuner Server setup"
-msgstr "Configurar sintonizador remoto"
-
-# LBTunerServer
-msgid ""
-"Your server is now being deleted\n"
-"Please Wait ..."
-msgstr ""
-"Se está borrando su servidor\n"
-"Por favor, espere..."
-
-# LBTunerServer
-msgid ""
-"Your server is now building\n"
-"Please wait ..."
-msgstr ""
-"Se está construyendo su servidor\n"
-"Por favor, espere..."
+msgid "Rename name and description for new events"
+msgstr "Cambiar nombre y descripción para nuevos evento"

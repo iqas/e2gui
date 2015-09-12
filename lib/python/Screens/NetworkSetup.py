@@ -2558,9 +2558,10 @@ class NetworkSamba(Screen):
 		self.Console.eBatch(commands, self.StartStopCallback, debug=True)
 
 	def updateService(self):
-		import process		
-		p = process.ProcessList()		
-		samba_process = str(p.named('nmbd')).strip('[]')
+		if '#microsoft-ds' in open('/etc/inetd.conf').read():
+                    samba_process = False
+                else:
+                    samba_process = True
 		self['labrun'].hide()
 		self['labstop'].hide()
 		self['labactive'].setText(_("Disabled"))
