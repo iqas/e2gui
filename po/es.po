@@ -17225,5 +17225,5 @@ msgid "Your receiver does not have an internet connection"
 msgstr "El receptor no está conectado a internet."
 
 #: Installation Wizard
-msgid "Please wait (downloader channel list)"
+msgid "Please wait (downloading channel list)"
 msgstr "Espera por favor (descargando lista de canales)."
