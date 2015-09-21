@@ -2151,7 +2151,7 @@ class RemoteTunerServer(Screen):
 		self.my_rts_active = False
 		self.my_rts_run = False
 		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.close, 'back': self.close, 'red': self.UninstallCheck, 'green': self.RemoteTunerServerStartStop, 'yellow': self.RemoteTunerServerSet})
-		self.service_name = 'xupnpd'
+		self.service_name = 'enigma2-plugin-extensions-lbtunerserver'
 		self.onLayoutFinish.append(self.InstallCheck)
 
 	def InstallCheck(self):
@@ -2198,14 +2198,13 @@ class RemoteTunerServer(Screen):
 		print "doInstall " ,callback, pkgname
 		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
 		self.message.setTitle(_('Installing Service'))
-		self.Console.ePopen('/usr/bin/opkg install ' + 'xupnpd' + ' enigma2-plugin-extensions-lbtunerserver', callback)
+		self.Console.ePopen('/usr/bin/opkg install enigma2-plugin-extensions-lbtunerserver', callback)
 
 	def installComplete(self,result = None, retval = None, extra_args = None):
 		self.session.open(TryQuitMainloop, 2)
 
 	def UninstallCheck(self):
 		self.Console.ePopen('/usr/bin/opkg list_installed ' + self.service_name, self.RemovedataAvail)
-		self.Console.ePopen('/usr/bin/opkg list_installed ' + ' xupnpd ', self.RemovedataAvail)
 
 	def RemovedataAvail(self, str, retval, extra_args):
 		if str:
@@ -2221,7 +2220,7 @@ class RemoteTunerServer(Screen):
 	def doRemove(self, callback, pkgname):
 		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
 		self.message.setTitle(_('Removing Service'))
-		self.Console.ePopen('/usr/bin/opkg remove ' + pkgname + ' enigma2-plugin-extensions-lbtunerserver' + ' --force-remove --autoremove --force-depends', callback)
+		self.Console.ePopen('/usr/bin/opkg remove ' + pkgname + ' --force-remove --autoremove --force-depends', callback)
 
 	def removeComplete(self,result = None, retval = None, extra_args = None):
 		self.session.open(TryQuitMainloop, 2)
