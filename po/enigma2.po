@@ -7,7 +7,7 @@ msgstr ""
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
 "PO-Revision-Date: 2015-05-19 16:33+0100\n"
 "Last-Translator: Joan González <joan@gonzalezcrego.es>\n"
-"Language-Team: Linux-Box\n"
+"Language-Team: openplus\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -170,7 +170,7 @@ msgid " extensions."
 msgstr ""
 
 msgid ""
-" has been sent to the Linux-Box team.\n"
+" has been sent to the OpenPlus team.\n"
 "please quote "
 msgstr ""
 
@@ -1343,7 +1343,7 @@ msgstr ""
 msgid "Button setup"
 msgstr ""
 
-msgid "By Linux-Box Team"
+msgid "By OpenPlus Team"
 msgstr ""
 
 #
@@ -3331,7 +3331,7 @@ msgstr ""
 msgid "Following tasks will be done after you press OK!"
 msgstr ""
 
-msgid "For more information see www.linux-box.es"
+msgid "For more information see www.open-plus.es"
 msgstr ""
 
 #
@@ -7793,7 +7793,7 @@ msgstr ""
 msgid "The sleep timer has been disabled."
 msgstr ""
 
-msgid "The status of the current beta image could not be checked because www.linux-box.es could not be reached for some reason"
+msgid "The status of the current beta image could not be checked because www.open-plus.es could not be reached for some reason"
 msgstr ""
 
 #
@@ -9327,7 +9327,7 @@ msgstr ""
 
 #
 msgid ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.linux-box.es.\n"
+"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.open-plus.es.\n"
 "Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
 msgstr ""
 
@@ -11634,10 +11634,10 @@ msgstr ""
 msgid "Update at your own risk"
 msgstr ""
 
-msgid "For more information see http://www.linux-box.es"
+msgid "For more information see http://www.open-plus.es"
 msgstr ""
 
-msgid "The status of the current update could not be checked because http://www.linux-box.es could not be reached for some reason"
+msgid "The status of the current update could not be checked because http://www.open-plus.es could not be reached for some reason"
 msgstr ""
 
 msgid "Do you want to update your box?"
@@ -14384,7 +14384,7 @@ msgstr ""
 #: BSOD
 msgid ""
 "We are really sorry. Your receiver encountered a software problem, and needs to be restarted.\n"
-"Please send the logfile %senigma2_crash_xxxxxx.log to www.linux-box.es.\n"
+"Please send the logfile %senigma2_crash_xxxxxx.log to www.open-plus.es.\n"
 "Your receiver restarts in 10 seconds!\n"
 "Component: enigma2"
 msgstr ""

@@ -112,7 +112,7 @@ class About(Screen):
 		self["lab1"] = StaticText(_("openplus"))
 		self["lab2"] = StaticText(_("By openplus Image Team"))
 		model = None
-		self["lab3"] = StaticText(_("Support at") + " www.linux-box.es")
+		self["lab3"] = StaticText(_("Support at") + " www.open-plus.es")
 
 		AboutText = getAboutText()[0]
 

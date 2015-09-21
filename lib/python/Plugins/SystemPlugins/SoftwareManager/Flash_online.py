@@ -33,14 +33,14 @@ if distro.lower() == "openmips":
 elif distro.lower() == "openplus":
 	image = 0
 if ImageVersion3 == '':
-	feedurl_atv = 'http://feeds.linux-box.es/openplus/%s' %ImageVersion
+	feedurl_atv = 'http://feeds.open-plus.es/openplus/%s' %ImageVersion
 else:
 	feedurl_atv = 'http://images2.mynonpublic.com/openplus/%s' %ImageVersion3
 if ImageVersion == '4.1' or ImageVersion == '4.0' or ImageVersion == '3.0' or ImageVersion == '4.3':
 	ImageVersion2= '4.2'
 else:
 	ImageVersion2= '5.0'
-feedurl_atv2= 'http://feeds.linux-box.es/openplus/%s' %ImageVersion2
+feedurl_atv2= 'http://feeds.open-plus.es/openplus/%s' %ImageVersion2
 feedurl_om = 'http://image.openmips.com/4.2'
 imagePath = '/media/hdd/images'
 flashPath = '/media/hdd/images/flash'

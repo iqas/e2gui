@@ -15,7 +15,7 @@ OPENPLUS está basada en código opensource de enigma2 de publicado por OpenAtv 
 Esta imagen no contiene claves, emuladores u otros sistemas que permitan el visionado sin una subscripción de pago
 
 Openplus está constituida por un conjunto de software de múltiples autores con licencias variadas que se pueden consultar en cada paquete.
-Todo el código generado por el equipo de Linux-Box, se ha licenciado bajo GPL.
+Todo el código generado por el equipo OpenPlus se ha licenciado bajo GPL.
 Tal como se indica en la licencia este software se entrega sin ninguna garantía.
 
 AGRADECIMIENTOS
