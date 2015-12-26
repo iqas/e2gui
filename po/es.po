@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2015-09-21 15:35+0200\n"
+"PO-Revision-Date: 2015-10-29 19:13+0100\n"
 "Last-Translator: Joan González - Jglez3 <joan@gonzalezcrego.es>\n"
 "Language-Team: OpenPlus <www.open-plus.es>\n"
 "Language: es\n"
@@ -13,11 +13,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Stop recording now"
 msgstr "Detener grabación"
+
+msgid "History Zap..."
+msgstr "Historial de zapping..."
 
 msgid "Change next timer"
 msgstr "Cambiar próximo temporizador"
@@ -6123,6 +6126,10 @@ msgid "Please wait while your network is restarting..."
 msgstr "Espera mientras se reinicia la red..."
 
 #
+msgid "Please wait while gathering data..."
+msgstr "Por favor, espera. Recuperando datos..."
+
+#
 msgid "Please wait..."
 msgstr "Por favor, espera..."
 
@@ -6505,7 +6512,7 @@ msgstr "Grabaciones..."
 
 #
 msgid "Recording"
-msgstr "Grabando"
+msgstr "Grabación"
 
 msgid "Recording settings"
 msgstr "Configurar grabaciones"
@@ -16795,44 +16802,47 @@ msgstr "Preguntar al usuario (con ‘sí’ como predeterminado)"
 msgid "Ask user (with default as 'no')"
 msgstr "Preguntar al usuario (con ‘no’ como predeterminado)"
 
-msgid "Model:\t%s %s\n"
-msgstr "Modelo:\t%s %s\n"
+msgid "Model:\t\t%s %s\n"
+msgstr "Modelo:\t\t%s %s\n"
 
-msgid "Chipset:\t%s"
-msgstr "Chipset:\t%s"
+msgid "Chipset:\t\t%s"
+msgstr "Chipset:\t\t%s"
 
-msgid "CPU:\t%s"
-msgstr "CPU:\t%s"
+msgid "CPU:\t\t%s"
+msgstr "CPU:\t\t%s"
 
-msgid "Cores:\t%s"
-msgstr "Núcleos:\t %s"
+msgid "Cores:\t\t%s"
+msgstr "Núcleos:\t\t%s"
 
-msgid "Version:\t%s"
-msgstr "Versión:\t%s"
+msgid "Version:\t\t%s"
+msgstr "Versión:\t\t%s"
 
-msgid "Build:\t%s"
-msgstr "Compilación:\t%s"
+msgid "Build:\t\t%s"
+msgstr "Compilación:\t\t%s"
 
-msgid "Kernel:\t%s"
-msgstr "Kernel:\t%s"
+msgid "Kernel:\t\t%s"
+msgstr "Kernel:\t\t%s"
 
 msgid "Last update:\t%s"
 msgstr "Última actualización:\t%s"
 
-msgid "Drivers:\t%s"
-msgstr "Drivers:\t%s"
+msgid "Drivers:\t\t%s"
+msgstr "Drivers:\t\t%s"
 
-msgid "Frontprocessor version: %s"
-msgstr "Versión del frontprocessor: %s"
+msgid "Frontprocessor version:\t%s"
+msgstr "Versión del frontprocessor:\t%s"
 
-msgid "GStreamer:\t%s"
-msgstr "GStreamer:\t%s"
+msgid "GStreamer:\t\t%s"
+msgstr "GStreamer:\t\t%s"
 
 msgid "System temperature:\t%s"
 msgstr "Temperatura del sistema:\t%s"
 
 msgid "Processor temperature:\t%s"
 msgstr "Temperatura del procesador:\t%s"
+
+msgid "Translations"
+msgstr "Traducciones"
 
 msgid "Clone TV screen to LCD"
 msgstr "Clonar pantalla de TV al LCD"
@@ -17227,3 +17237,159 @@ msgstr "El receptor no está conectado a internet."
 #: Installation Wizard
 msgid "Please wait (downloading channel list)"
 msgstr "Espera por favor (descargando lista de canales)."
+
+#: Timer
+msgid "Current location"
+msgstr "Localización actual"
+
+#: Timer
+msgid "Chose between record and ZAP."
+msgstr "Elija entre grabación y ZAP."
+
+#: Timer
+msgid "A repeating timer or just once?"
+msgstr "¿Repetir temporizador, o usar una sola vez?"
+
+#: Timer
+msgid "Set the date the timer must start."
+msgstr "Establezca la fecha en que el temporizador debe comenzar."
+
+#: Timer
+msgid "Set the time the timer must start."
+msgstr "Establezca la hora en que el temporizador debe comenzar."
+
+#: Timer
+msgid "Set the time the timer must stop."
+msgstr "Establezca la hora en que el temporizador debe acabar."
+
+#: Timer
+msgid "Set the channel for this timer."
+msgstr "Establezca el canal para este temporizador."
+
+#: Timer
+msgid "Where should the recording be saved?"
+msgstr "¿Dónde se debe guardar la grabación?"
+
+#: Timer
+msgid "Choose between Daily, Weekly, Weekdays or user defined."
+msgstr ""
+"Elija entre Diario, Semanal. Días de la semana o definido por el usuario."
+
+#: Timer
+msgid "Set the description of the recording."
+msgstr "Establezca la descripción de la grabación"
+
+#: Timer
+msgid "Set the name the recording will get."
+msgstr "Establezca el nombre de la grabación"
+
+#: Timer
+msgid ""
+"What action is required on complettion of the timer? 'Auto' lets the box "
+"return to the state it had when the timer started. 'Do nothing', 'Go to "
+"standby' and 'Go to deep standby' do ecaxtly that."
+msgstr ""
+"¿Qué medidas se requiere al finalizar el temporizador? 'Auto' permite que el "
+"cuadro de retorne al estado que tenía cuando el cronómetro se puso en "
+"marcha. 'No hacer nada' , 'ir al modo de espera' y 'Ir a la espera profunda' "
+"hacer exactamente eso."
+
+#: NetworkWizard
+msgid ""
+"Your %s %s is now ready to be used.\n"
+"\n"
+"Your internet connection is working now.\n"
+"\n"
+msgstr ""
+"Tu %s %s está preparada para ser usada.\n"
+"\n"
+"La conexión a internet está funcionando ahora.\n"
+"\n"
+
+#: Info
+msgid "Playback Time:"
+msgstr "Tiempo Reproducción:"
+
+#: Info
+msgid "Program Duration:"
+msgstr "Duración del Programa:"
+
+#: Info
+msgid "You're watching..."
+msgstr "Estás viendo..."
+
+#: Info
+msgid "CLICK      TO RECORD SELECTED PROGRAM"
+msgstr "PULSA     PARA GRABAR PROGRAMA SELECCIONADO"
+
+#: Info
+msgid "SEARCH"
+msgstr "BÚSQUEDA"
+
+#: Info
+msgid "PROGRAMS TV"
+msgstr "PROGRAMAS"
+
+#: Info
+msgid "DESCRIPTION"
+msgstr "DESCRIPCIÓN"
+
+#: Info
+msgid "GUIDE"
+msgstr "GUÍA"
+
+#: Info
+msgid "MULTIGUID"
+msgstr "MULTIGUÍA"
+
+#: Info
+msgid "LIST"
+msgstr "LISTA"
+
+#: Info
+msgid "CHANNELS"
+msgstr "CANALES"
+
+#: Info
+msgid "MUSIC"
+msgstr "MÚSICA"
+
+#: Info
+msgid "       +MORE INFO "
+msgstr "       +MÁS INFO "
+
+#: Info
+msgid "                                      RECORD PROGRAM"
+msgstr "                                      GRABAR PROGRAMA"
+
+#: Info
+msgid "CHOOSE THE CHANNEL TO RECORD , AND THEN PRESS BLUE BUTTON"
+msgstr "ESCOJE EL CANAL PARA GRABAR, Y LUEGO PULSA BOTÓN AZUL"
+
+#: Info
+msgid " Translation of Enigma:"
+msgstr " Traducción de Enigma:"
+
+#: Info
+msgid " Translation Plugins:"
+msgstr " Traducción de Plugins:"
+
+#: Info
+msgid "MY MOVIE"
+msgstr "MI CANAL"
+
+#: YouTubeSearch.py:86
+msgid "YouTube search"
+msgstr "Búsqueda Youtube"
+
+#: YouTubeDownload.py:153 YouTubeUi.py:1097
+msgid "Active video downloads"
+msgstr "Descargas activas"
+
+#: Info
+msgid "Scan files..."
+msgstr "Buscar archivos..."
+
+#: Info
+msgid "Play back media files"
+msgstr "Reproduzca archivos multimedia"

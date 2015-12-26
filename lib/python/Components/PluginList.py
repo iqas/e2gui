@@ -18,7 +18,7 @@ def PluginEntryComponent(plugin, width=540):
 		plugin,
 		MultiContentEntryText(pos=(180, 1), size=(width-120, 35), font=2, text=plugin.name),
 		MultiContentEntryText(pos=(180, 38), size=(width-120, 25), font=3, text=plugin.description),
-		MultiContentEntryPixmapAlphaBlend(pos=(10, 5), size=(150, 60), png = png)
+		MultiContentEntryPixmapAlphaBlend(pos=(15, 5), size=(150, 60), png = png)
 		]
 	else:
 		return [
@@ -33,7 +33,7 @@ def PluginCategoryComponent(name, png, width=440):
 	if screenwidth and screenwidth == 1920:
 		return [
 		name,
-		MultiContentEntryText(pos=(110, 15), size=(width-80, 35), font=2, text=name),
+		MultiContentEntryText(pos=(110, 5), size=(width-80, 35), font=4, text=name),
 		MultiContentEntryPixmapAlphaBlend(pos=(10, 0), size=(90, 75), png = png)
 		]
 	else:
@@ -43,7 +43,7 @@ def PluginCategoryComponent(name, png, width=440):
 		MultiContentEntryPixmapAlphaBlend(pos=(10, 0), size=(60, 50), png = png)
 		]
 
-def PluginDownloadComponent(plugin, name, version=None, width=440):
+def PluginDownloadComponent(plugin, name, version=None, width=640):
 	screenwidth = getDesktop(0).size().width()
 	if plugin.icon is None:
 		png = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/plugin.png"))
@@ -60,7 +60,7 @@ def PluginDownloadComponent(plugin, name, version=None, width=440):
 		return [
 		plugin,
 		MultiContentEntryText(pos=(110, 1), size=(width-80, 35), font=2, text=name),
-		MultiContentEntryText(pos=(110, 38), size=(width-80, 25), font=3, text=plugin.description),
+		MultiContentEntryText(pos=(110, 32), size=(width-80, 25), font=1, text=plugin.description),
 		MultiContentEntryPixmapAlphaBlend(pos=(10, 0), size=(90, 75), png = png)
 		]
 	else:
@@ -77,6 +77,7 @@ class PluginList(MenuList):
 		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 14))
-		self.l.setFont(2, gFont("Regular", 32))
-		self.l.setFont(3, gFont("Regular", 24))
+		self.l.setFont(2, gFont("Regular", 28))
+		self.l.setFont(3, gFont("Regular", 18))
+		self.l.setFont(4, gFont("Regular", 26))
 		self.l.setItemHeight(50)

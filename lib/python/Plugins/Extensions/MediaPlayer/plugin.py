@@ -28,6 +28,7 @@ from Components.config import config
 from Tools.Directories import fileExists, resolveFilename, SCOPE_CONFIG, SCOPE_PLAYLIST
 from Tools.BoundFunction import boundFunction
 from settings import MediaPlayerSettings
+from enigma import getDesktop
 
 
 class MyPlayList(PlayList):
@@ -1241,9 +1242,44 @@ def filescan(**kwargs):
 		]
 
 from Plugins.Plugin import PluginDescriptor
+
 def Plugins(**kwargs):
-	return [
-		PluginDescriptor(name = _("Media player"), description = _("Play back media files"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="MediaPlayer.png", needsRestart = False, fnc = main),
-		#PluginDescriptor(name = _("Media player"), where = PluginDescriptor.WHERE_FILESCAN, needsRestart = False, fnc = filescan),
-		PluginDescriptor(name = _("Media player"), description = _("Play back media files"), where = PluginDescriptor.WHERE_MENU, needsRestart = False, fnc = menu)
-	]
+	screenwidth = getDesktop(0).size().width()
+	if screenwidth and screenwidth == 1920:
+		return [PluginDescriptor(
+			name = _('Media player'),
+			description = _('Play back media files'),
+			where = [
+			PluginDescriptor.WHERE_PLUGINMENU
+			],
+			icon = "MediaPlayerhd.png",
+			needsRestart = False,
+			fnc = main
+			),
+			PluginDescriptor(
+			name = _('Media player'),
+			description = _('Play back media files'),
+			where = 
+			PluginDescriptor.WHERE_MENU, 
+			needsRestart = False, 
+			fnc = menu
+			)]
+	else:
+		return [PluginDescriptor(
+			name = _('Media player'),
+			description = _('Play back media files'),
+			where = [
+			PluginDescriptor.WHERE_PLUGINMENU
+			],
+			icon = "MediaPlayer.png",
+			needsRestart = False,
+			fnc = main
+			),
+			PluginDescriptor(
+			name = _('Media player'),
+			description = _('Play back media files'),
+			where = 
+			PluginDescriptor.WHERE_MENU, 
+			needsRestart = False, 
+			fnc = menu
+			)]

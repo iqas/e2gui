@@ -38,7 +38,7 @@ EXTENSIONS = {
 def FileEntryComponent(name, absolute = None, isDir = False):
 	screenwidth = getDesktop(0).size().width()
 	if screenwidth and screenwidth == 1920:
-		res = [(absolute, isDir), (eListboxPythonMultiContent.TYPE_TEXT, 90, 3, 470, 60, 1, RT_HALIGN_LEFT, name)]
+		res = [(absolute, isDir), (eListboxPythonMultiContent.TYPE_TEXT, 90, 3, 570, 60, 1, RT_HALIGN_LEFT, name)]
 	else:
 		res = [(absolute, isDir), (eListboxPythonMultiContent.TYPE_TEXT, 35, 1, 470, 20, 0, RT_HALIGN_LEFT, name)]
 	if isDir:
@@ -80,7 +80,7 @@ class FileList(MenuList):
 		self.refreshMountpoints()
 		self.changeDir(directory)
 		self.l.setFont(0, gFont("Regular", 18))
-		self.l.setFont(1, gFont("Regular", 32))
+		self.l.setFont(1, gFont("Regular", 24))
 		self.l.setItemHeight(23)
 		self.serviceHandler = eServiceCenter.getInstance()
 
@@ -275,7 +275,7 @@ class FileList(MenuList):
 def MultiFileSelectEntryComponent(name, absolute = None, isDir = False, selected = False):
 	screenwidth = getDesktop(0).size().width()
 	if screenwidth and screenwidth == 1920:
-		res = [(absolute, isDir, selected, name), (eListboxPythonMultiContent.TYPE_TEXT, 150, 3, 470, 60, 1, RT_HALIGN_LEFT, name)]
+		res = [(absolute, isDir, selected, name), (eListboxPythonMultiContent.TYPE_TEXT, 150, 3, 570, 60, 1, RT_HALIGN_LEFT, name)]
 	else:
 		res = [(absolute, isDir, selected, name), (eListboxPythonMultiContent.TYPE_TEXT, 55, 1, 470, 20, 0, RT_HALIGN_LEFT, name)]
 	if isDir:
@@ -314,7 +314,7 @@ class MultiFileSelectList(FileList):
 		self.changeDir(directory)
 		self.l.setItemHeight(25)
 		self.l.setFont(0, gFont("Regular", 20))
-		self.l.setFont(1, gFont("Regular", 32))
+		self.l.setFont(1, gFont("Regular", 24))
 		self.onSelectionChanged = [ ]
 
 	def selectionChanged(self):
