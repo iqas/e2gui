@@ -14210,7 +14210,7 @@ msgstr "Instalando servicio"
 
 #: Download Netzwerk Dienste
 msgid "Removing Service"
-msgstr "Desinstalando servicio"
+msgstr "Desinstalando..."
 
 #: Backup/restore
 msgid "Restore Plugins"
@@ -17393,3 +17393,123 @@ msgstr "Buscar archivos..."
 #: Info
 msgid "Play back media files"
 msgstr "Reproduzca archivos multimedia"
+
+#
+msgid "Advanced Options"
+msgstr "Opciones avanzadas"
+
+#: Info
+msgid "PHOTO"
+msgstr "FOTOS"
+
+#: udpxy
+msgid "Send Cfg"
+msgstr "Enviar lista"
+
+#: udpxy
+msgid "Client IP"
+msgstr "Ip Cliente"
+
+#: udpxy
+msgid "Client User"
+msgstr "Usuario Cliente"
+
+#: udpxy
+msgid "Client Password"
+msgstr "Contraseña Cliente"
+
+#: udpxy
+msgid "Sharing config..."
+msgstr "Compartir config... "
+
+#: udpxy
+msgid "Update config by ftp"
+msgstr "Actualizar config por FTP"
+
+#: udpxy
+msgid "Transfer was successfully finished"
+msgstr "Transferecia completada con éxito"
+
+#: udpxy
+msgid "Transfer was finished with errors: %s"
+msgstr "Transferecia completada con errores: %s"
+
+#: udpxy
+msgid "Movistar+ Iptv Server Config"
+msgstr "Configuración Movistar Iptv Server"
+
+#: udpxy
+msgid "Movistar+ Iptv Config Sharing"
+msgstr "Configuración compartir Movistar Iptv"
+
+#: udpxy
+msgid "Down m3u"
+msgstr "Descargar m3u"
+
+#: udpxy
+msgid "Send Conf"
+msgstr "Enviar conf."
+
+#: udpxy
+msgid "Udpxy Server IP"
+msgstr "IP Servidor"
+
+#: udpxy
+msgid "Udpxy Server port"
+msgstr "Puerto servidor"
+
+#: udpxy
+msgid "Configuration is saved and service restarted"
+msgstr "Configuración guardada, y el servicio reiniciado!"
+
+#: udpxy
+msgid "Movistar+ Iptv Server"
+msgstr "Movistar+ Iptv Servidor"
+
+#: udpxy
+msgid "Udpxy Setup"
+msgstr "Movistar+ Iptv Servidor"
+
+#: udpxy
+msgid ""
+"First configure Ip, user and password of your receiver client and then press "
+"the green button to send channel list to another receiver of your network."
+msgstr ""
+"Primero configure, Ip, Usuario y contraseña de su receptor cliente, a "
+"continuación, pulse el botón verde, para enviar lista de canales a otro "
+"receptor de su red."
+
+#: udpxy
+msgid ""
+"First configure IP and port of the server and click save... Then Press the "
+"yellow button to configure channel list and sent to another receiver in your "
+"network. Press blue button to download the list m3u media/hdd."
+msgstr ""
+"Primero configure Ip y puerto de su servidor y haga clic en guardar... A "
+"continuación pulse el botón amarillo, para configurar y enviar la lista de "
+"canales a otro receptor en su red. Pulse botón azul para descargar la lista "
+"m3u a media/hdd."
+
+#: meteo
+msgid "OpenPlus! YWeather Configuration"
+msgstr "OpenPlus! YTiempo Configuración"
+
+#: meteo
+msgid "You can find your ID in http://open-plus.es/YWeather/"
+msgstr "Podrás encontrar tu ID en http://open-plus.es/YWeather/"
+
+#: meteo
+msgid "Feeling:"
+msgstr "Sensación:"
+
+#: meteo
+msgid "Humidity:"
+msgstr "Humedad:"
+
+#: meteo
+msgid "Wind:"
+msgstr "Viento:"
+
+#: meteo
+msgid "Current:"
+msgstr "Actual:"

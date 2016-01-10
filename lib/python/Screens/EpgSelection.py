@@ -42,6 +42,7 @@ class EPGSelection(Screen, HelpableScreen):
 
 	def __init__(self, session, service = None, zapFunc = None, eventid = None, bouquetChangeCB=None, serviceChangeCB = None, EPGtype = None, StartBouquet = None, StartRef = None, bouquets = None):
 		Screen.__init__(self, session)
+		self.setTitle(_('EPG Selection'))
 		HelpableScreen.__init__(self)
 		self.zapFunc = zapFunc
 		self.serviceChangeCB = serviceChangeCB
@@ -63,6 +64,8 @@ class EPGSelection(Screen, HelpableScreen):
 				graphic = True
 		elif EPGtype == 'multi':
 			self.type = EPG_TYPE_MULTI
+		elif EPGtype is None and eventid == None and isinstance(service, eServiceReference):
+			self.type = EPG_TYPE_SINGLE
 		else:
 			self.type = EPG_TYPE_SIMILAR
 		if not self.type == EPG_TYPE_SINGLE:
@@ -1007,8 +1010,12 @@ class EPGSelection(Screen, HelpableScreen):
 		if title:
 			self.ChoiceBoxDialog = self.session.instantiateDialog(ChoiceBox, title=title, list=menu, keys=['green', 'blue'], skin_name="RecordTimerQuestion")
 			serviceref = eServiceReference(str(self['list'].getCurrent()[1]))
-			posy = self['list'].getSelectionPosition(serviceref)
-			self.ChoiceBoxDialog.instance.move(ePoint(posy[0]-self.ChoiceBoxDialog.instance.size().width(),self.instance.position().y()+posy[1]))
+			pos = self['list'].getSelectionPosition(serviceref)
+			posx = pos[0]
+			dialogwidth = self.ChoiceBoxDialog.instance.size().width()
+			if posx - dialogwidth < 0:
+				posx = dialogwidth
+			self.ChoiceBoxDialog.instance.move(ePoint(posx-dialogwidth,self.instance.position().y()+pos[1]))
 			self.showChoiceBoxDialog()
 
 	def recButtonPressed(self):

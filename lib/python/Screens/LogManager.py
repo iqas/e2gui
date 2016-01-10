@@ -1,4 +1,4 @@
-﻿from Screens.Screen import Screen
+from Screens.Screen import Screen
 from Components.GUIComponent import GUIComponent
 from Components.VariableText import VariableText
 from Components.ActionMap import ActionMap
@@ -398,7 +398,7 @@ class LogManager(Screen):
 		msg = MIMEMultipart()
 		if config.logmanager.user.value != '' and config.logmanager.useremail.value != '':
 			fromlogman = config.logmanager.user.value + '  <' + config.logmanager.useremail.value + '>'
-			tocrashlogs = 'crashlogs@dummy.org'
+			tocrashlogs = 'crashlogs@open-plus.es'
 			msg['From'] = fromlogman
 			msg['To'] = tocrashlogs
 			msg['Cc'] = fromlogman
@@ -436,13 +436,13 @@ class LogManager(Screen):
 				self.saveSelection()
 
 			# Send the email via our own SMTP server.
-			wos_user = 'crashlogs@dummy.org'
+			wos_user = 'crashlogs@open-plus.es'
 			wos_pwd = base64.b64decode('NDJJWnojMEpldUxX')
 
 			try:
-				print "connecting to server: mail.dummy.org"
+				print "connecting to server: mail.open-plus.es"
 				#socket.setdefaulttimeout(30)
-				s = smtplib.SMTP("mail.dummy.org",26)
+				s = smtplib.SMTP("mail.open-plus.es",26)
 				s.login(wos_user, wos_pwd)
 				if config.logmanager.usersendcopy.value:
 					s.sendmail(fromlogman, [tocrashlogs, fromlogman], msg.as_string())

@@ -18,6 +18,7 @@ enigma2_config.h
 enigma2_config.h.in
 enigma2.pc
 index-enigma2.xml
+DEADJOE
 INSTALL
 install-sh
 *.la

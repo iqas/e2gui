@@ -126,6 +126,9 @@ class VideoSetup(Screen, ConfigListScreen):
 #		if not isinstance(config.av.scaler_sharpness, ConfigNothing):
 #			self.list.append(getConfigListEntry(_("Scaler sharpness"), config.av.scaler_sharpness, _("This option configures the picture sharpness.")))
 
+		if SystemInfo["havecolorspace"]:
+			self.list.append(getConfigListEntry(_("HDMI Colorspace"), config.av.hdmicolorspace,_("This option allows you can config the Colorspace from Auto to RGB")))
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 		if config.usage.sort_settings.value:
@@ -177,6 +180,8 @@ class VideoSetup(Screen, ConfigListScreen):
 				self.hw.setMode(port, '1080p', '50Hz')
 			elif (smart1080p == '1080p50') or (smart1080p == 'true'): # for compatibility with old ConfigEnableDisable
 				self.hw.setMode(port, '1080p', '50Hz')
+			elif smart1080p == '2160p50':
+				self.hw.setMode(port, '2160p', '50Hz')
 			elif smart1080p == '1080i50':
 				self.hw.setMode(port, '1080i', '50Hz')
 			elif smart1080p == '720p50':
@@ -264,7 +269,7 @@ class AudioSetup(Screen, ConfigListScreen):
 			if SystemInfo["CanDownmixAAC"]:
 				self.list.append(getConfigListEntry(_("AAC downmix"), config.av.downmix_aac, _("Choose whether multi channel sound tracks should be downmixed to stereo.")))
 			if SystemInfo["Canaudiosource"]:
-				self.list.append(getConfigListEntry(_("Audio Source"), config.av.audio_source, _("Choose whether multi channel sound tracks should be convert to PCM or SPDIF.")))				
+				self.list.append(getConfigListEntry(_("Audio Source"), config.av.audio_source, _("Choose whether multi channel sound tracks should be convert to PCM or SPDIF.")))
 			if SystemInfo["CanAACTranscode"]:
 				self.list.append(getConfigListEntry(_("AAC transcoding"), config.av.transcodeaac, _("Choose whether AAC sound tracks should be transcoded.")))
 			self.list.extend((
@@ -348,6 +353,7 @@ class AutoVideoMode(Screen):
 				iPlayableService.evVideoProgressiveChanged: self.VideoChanged,
 				iPlayableService.evVideoFramerateChanged: self.VideoChanged,
 				iPlayableService.evBuffering: self.BufferInfo,
+				iPlayableService.evStopped: self.BufferInfoStop
 			})
 
 		self.delay = False
@@ -362,6 +368,9 @@ class AutoVideoMode(Screen):
 			self.VideoChanged()
 		else:
 			self.bufferfull = False
+
+	def BufferInfoStop(self):
+		self.bufferfull = True
 
 	def VideoChanged(self):
 		if self.session.nav.getCurrentlyPlayingServiceReference() and not self.session.nav.getCurrentlyPlayingServiceReference().toString().startswith('4097:'):
@@ -536,7 +545,6 @@ class AutoVideoMode(Screen):
 			# always use a fixed resolution and frame rate   (e.g. 1080p50 if supported) for TV or .ts files
 			# always use a fixed resolution and correct rate (e.g. 1080p24/p50/p60 for all other videos
 			if config.av.smart1080p.value != 'false':
-				print "DEBUG VIDEOMODE/ smart1080p enabled"
 				ref = self.session.nav.getCurrentlyPlayingServiceReference()
 				if ref is not None:
 					try:
@@ -545,21 +553,20 @@ class AutoVideoMode(Screen):
 						mypath = ''
 				else:
 					mypath = ''
-				if new_rate == 'multi':
-					# no frame rate information available, check if filename (or directory name) contains a hint
-					# (allow user to force a frame rate this way):
-					if   (mypath.find('p24.') >= 0) or (mypath.find('24p.') >= 0):
-						new_rate = '24'
-					elif (mypath.find('p25.') >= 0) or (mypath.find('25p.') >= 0):
-						new_rate = '25'
-					elif (mypath.find('p30.') >= 0) or (mypath.find('30p.') >= 0):
-						new_rate = '30'
-					elif (mypath.find('p50.') >= 0) or (mypath.find('50p.') >= 0):
-						new_rate = '50'
-					elif (mypath.find('p60.') >= 0) or (mypath.find('60p.') >= 0):
-						new_rate = '60'
-					else:
-						new_rate = '' # omit frame rate specifier, e.g. '1080p' instead of '1080p50' if there is no clue
+				# no frame rate information available, check if filename (or directory name) contains a hint
+				# (allow user to force a frame rate this way):
+				if   (mypath.find('p24.') >= 0) or (mypath.find('24p.') >= 0):
+					new_rate = '24'
+				elif (mypath.find('p25.') >= 0) or (mypath.find('25p.') >= 0):
+					new_rate = '25'
+				elif (mypath.find('p30.') >= 0) or (mypath.find('30p.') >= 0):
+					new_rate = '30'
+				elif (mypath.find('p50.') >= 0) or (mypath.find('50p.') >= 0):
+					new_rate = '50'
+				elif (mypath.find('p60.') >= 0) or (mypath.find('60p.') >= 0):
+					new_rate = '60'
+				elif new_rate == 'multi':
+					new_rate = '' # omit frame rate specifier, e.g. '1080p' instead of '1080p50' if there is no clue
 				if mypath != '':
 					if mypath.endswith('.ts'):
 						print "DEBUG VIDEOMODE/ playing .ts file"
@@ -576,10 +583,16 @@ class AutoVideoMode(Screen):
 				
 				if  (config.av.smart1080p.value == '1080p50') or (config.av.smart1080p.value == 'true'): # for compatibility with old ConfigEnableDisable
 					write_mode = '1080p' + new_rate
+				elif config.av.smart1080p.value == '2160p50':
+					write_mode = '2160p' + new_rate
 				elif config.av.smart1080p.value == '1080i50':
-					write_mode = '1080i' + new_rate
+					if new_rate == '24':
+						write_mode = '1080p24' # instead of 1080i24
+					else:
+						write_mode = '1080i' + new_rate
 				elif config.av.smart1080p.value == '720p50':
 					write_mode = '720p' + new_rate
+				print "[VideoMode] smart1080p mode, selecting ",write_mode
 
 			if write_mode and current_mode != write_mode and self.bufferfull:
 				# first we read now the real available values for every stb,
@@ -602,11 +615,11 @@ class AutoVideoMode(Screen):
 						if not changeResolution:
 							print "[VideoMode] setMode - port: %s, mode: %s is not available" % (config_port, write_mode)
 							resolutionlabel["restxt"].setText(_("Video mode: %s not available") % write_mode)
-							# we try to go for not available 1080p24 to change to 1080p from 60hz_choices if available
+							# we try to go for not available 1080p24/1080p30/1080p60 to change to 1080p from 60hz_choices if available
 							# TODO: can we make it easier, or more important --> smaller ?
 							# should we outsourced that way, like two new "def ..."
 							# or some other stuff, not like this?
-							if write_mode == "1080p24":
+							if (write_mode == "1080p24") or (write_mode == "1080p30") or (write_mode == "1080p60"):
 								for x in values:
 									if x == "1080p":
 										try:
@@ -622,6 +635,22 @@ class AutoVideoMode(Screen):
 								else:
 									print "[VideoMode] setMode - port: %s, mode: %s" % (config_port, x)
 									resolutionlabel["restxt"].setText(_("Video mode: %s") % x)
+							if (write_mode == "2160p24") or (write_mode == "2160p30") or (write_mode == "2160p60"):
+								for x in values:
+									if x == "2160p":
+										try:
+											f = open("/proc/stb/video/videomode", "w")
+											f.write(x)
+											f.close()
+											changeResolution = True
+										except Exception, e:
+											print("[VideoMode] write_mode exception:" + str(e))
+								if not changeResolution:
+									print "[VideoMode] setMode - port: %s, mode: 2160p is also not available" % config_port
+									resolutionlabel["restxt"].setText(_("Video mode: 2160p also not available"))
+								else:
+									print "[VideoMode] setMode - port: %s, mode: %s" % (config_port, x)
+									resolutionlabel["restxt"].setText(_("Video mode: %s") % x)
 						else:
 							resolutionlabel["restxt"].setText(_("Video mode: %s") % write_mode)
 							print "[VideoMode] setMode - port: %s, mode: %s" % (config_port, write_mode)
@@ -630,6 +659,9 @@ class AutoVideoMode(Screen):
 						vf.close()
 				except Exception, e:
 					print("[VideoMode] read videomode_choices exception:" + str(e))
+			elif write_mode and current_mode != write_mode:
+				# the resolution remained stuck at a wrong setting after streaming when self.bufferfull was False (should be fixed now after adding BufferInfoStop)
+				print "[VideoMode] not changing from",current_mode,"to",write_mode,"as self.bufferfull is",self.bufferfull
 
 		iAVSwitch.setAspect(config.av.aspect)
 		iAVSwitch.setWss(config.av.wss)

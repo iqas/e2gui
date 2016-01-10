@@ -1,9 +1,15 @@
 from boxbranding import getBoxType, getImageVersion
 from sys import modules
-import socket, fcntl, struct
+import socket, fcntl, struct, time, os
 
 def getVersionString():
 	return getImageVersion()
+
+def getFlashDateString():
+	try:
+		return time.strftime(_("%Y-%m-%d"), time.localtime(os.stat("/boot").st_ctime))
+	except:
+		return _("unknown")
 
 def getEnigmaVersionString():
 	return getImageVersion()
@@ -43,41 +49,47 @@ def getChipSetString():
 			return "unavailable"
 
 def getCPUSpeedString():
-	try:
-		file = open('/proc/cpuinfo', 'r')
-		lines = file.readlines()
-		for x in lines:
-			splitted = x.split(': ')
-			if len(splitted) > 1:
-				splitted[1] = splitted[1].replace('\n','')
-				if splitted[0].startswith("cpu MHz"):
-					mhz = float(splitted[1].split(' ')[0])
-					if mhz and mhz >= 1000:
-						mhz = "%s GHz" % str(round(mhz/1000,1))
-					else:
-						mhz = "%s MHz" % str(round(mhz,1))
-		file.close()
-		return mhz
-	except IOError:
-		return "unavailable"
+	if getBoxType() in ('vusolo4k'):
+		return "1,5 GHz"
+	else:
+		try:
+			file = open('/proc/cpuinfo', 'r')
+			lines = file.readlines()
+			for x in lines:
+				splitted = x.split(': ')
+				if len(splitted) > 1:
+					splitted[1] = splitted[1].replace('\n','')
+					if splitted[0].startswith("cpu MHz"):
+						mhz = float(splitted[1].split(' ')[0])
+						if mhz and mhz >= 1000:
+							mhz = "%s GHz" % str(round(mhz/1000,1))
+						else:
+							mhz = "%s MHz" % str(round(mhz,1))
+			file.close()
+			return mhz
+		except IOError:
+			return "unavailable"
 
 def getCPUString():
-	try:
-		system="unknown"
-		file = open('/proc/cpuinfo', 'r')
-		lines = file.readlines()
-		for x in lines:
-			splitted = x.split(': ')
-			if len(splitted) > 1:
-				splitted[1] = splitted[1].replace('\n','')
-				if splitted[0].startswith("system type"):
-					system = splitted[1].split(' ')[0]
-				elif splitted[0].startswith("Processor"):
-					system = splitted[1].split(' ')[0]
-		file.close()
-		return system
-	except IOError:
-		return "unavailable"
+	if getBoxType() in ('xc7362', 'vusolo4k'):
+		return "Broadcom"
+	else:
+		try:
+			system="unknown"
+			file = open('/proc/cpuinfo', 'r')
+			lines = file.readlines()
+			for x in lines:
+				splitted = x.split(': ')
+				if len(splitted) > 1:
+					splitted[1] = splitted[1].replace('\n','')
+					if splitted[0].startswith("system type"):
+						system = splitted[1].split(' ')[0]
+					elif splitted[0].startswith("Processor"):
+						system = splitted[1].split(' ')[0]
+			file.close()
+			return system
+		except IOError:
+			return "unavailable"
 
 def getCpuCoresString():
 	try:
@@ -130,6 +142,22 @@ def getIfTransferredData(ifname):
 			rx_bytes, tx_bytes = (data[0], data[8])
 			f.close()
 			return rx_bytes, tx_bytes
+
+def getPythonVersionString():
+	try:
+		import commands
+		status, output = commands.getstatusoutput("python -V")
+		return output.split(' ')[1]
+	except:
+		return _("unknown")
+
+def getPythonVersionString():
+	try:
+		import commands
+		status, output = commands.getstatusoutput("python -V")
+		return output.split(' ')[1]
+	except:
+		return _("unknown")
 
 # For modules that do "from About import about"
 about = modules[__name__]

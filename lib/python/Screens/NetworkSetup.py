@@ -4000,3 +4000,364 @@ class NetworkServicesSummary(Screen):
 		self["title"].text = title
 		self["status_summary"].text = status_summary
 		self["autostartstatus_summary"].text = autostartstatus_summary
+
+######################################################################################################################		
+from Components.config import config, getConfigListEntry, ConfigText, ConfigSelection, ConfigSubsection, configfile, NoSave
+config.networkiptv = ConfigSubsection()
+config.networkiptv.udpxyport = ConfigNumber(default = "8088")
+config.networkiptv.udpxyipserver = ConfigIP(default = [127,0,0,1])
+config.networkiptv.udpxyipclient = ConfigIP(default = [192,168,0,1])
+config.networkiptv.udpxyloginclient = ConfigText(default = "root",fixed_size = False, visible_width=30)
+config.networkiptv.udpxypassclient = ConfigText(default = "",fixed_size = False, visible_width=30)
+
+class udpxySendConfig(ConfigListScreen, Screen):
+        skin = """ 
+		<screen name="iptvconfsend" position="center,238" size="580,308" title="Movistar+ Iptv Config Sharing" backgroundColor="white">        
+		 <widget name="config" position="9,19" size="400,218" font="Regular;20" valign="center" transparent="0" backgroundColor="white" foregroundColor="black" />
+		 <widget name="key_green" position="0,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="green" transparent="0" />
+		 <widget name="key_blue" position="140,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="blue" transparent="0" />
+		 <widget name="key_yellow" position="280,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="yellow" transparent="0" />
+		 <widget name="key_red" position="420,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="red" transparent="0" />
+		</screen>
+        """	
+        def __init__(self, session):
+		Screen.__init__(self, session)
+		Screen.setTitle(self, _("Movistar+ Iptv Config Sharing"))
+		self.skinName = "iptvconfsend"
+		self['key_green'] = Label(_("Send Cfg"))
+		self['key_red'] = Label(_("Cancel"))
+		self['key_yellow'] = Label("")
+		self['key_blue'] = Label("")
+		self['key_yellow'].hide()
+		self['key_blue'].hide()
+		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.sendCfg, 'back': self.close, 'red': self.close, 'green': self.sendCfg })
+		self.list = []
+                self.list.append(getConfigListEntry(_("Client IP"), config.networkiptv.udpxyipclient))
+		self.list.append(getConfigListEntry(_("Client User"), config.networkiptv.udpxyloginclient))
+		self.list.append(getConfigListEntry(_("Client Password"), config.networkiptv.udpxypassclient))
+        	ConfigListScreen.__init__(self, self.list)
+
+	def sendCfg(self):
+		print "Sending config"
+		self.message = self.session.open(MessageBox, _("Sharing config..."), MessageBox.TYPE_INFO, timeout=4)
+		self.message.setTitle(_("Update config by ftp"))
+		config.networkiptv.udpxyipclient.save()
+		config.networkiptv.udpxyloginclient.save()
+		config.networkiptv.udpxypassclient.save()
+		configfile.save()
+		## Send by FTP
+		try:
+			import ftplib
+			_ip = config.networkiptv.udpxyipclient.getText() 
+			ftp = ftplib.FTP(_ip)
+			ftp.login(config.networkiptv.udpxyloginclient.value, config.networkiptv.udpxypassclient.value)
+			#Baja el fichero /etc/enigma2/bouquets.tv a /tmp/bouquets.tv
+			ftp.cwd("/etc/enigma2")
+			myfile = open("/tmp/bouquets.tv", 'wb')
+			ftp.retrbinary('RETR bouquets.tv', myfile.write)
+			myfile.close()
+			#Parchea el fichero anadiendo la linea #SERVICE: 1:7:1:0:0:0:0:0:0:0:userbouquetsmp.iptv.tv
+			myfile = open("/tmp/bouquets.tv",'r')
+			find="0"
+			for line in myfile:
+				if line.find('userbouquetsmp.iptv.tv') >= 0:
+					# La linea ya existe
+					find=line
+				#Anade retorno de carro en la ultima linea si no lo contiene
+				#if (line[:-1] == "\n"):
+				#	print ("LINEA: %s" % hex(ord(line[:-1])))
+				#	_addline=False
+				#else:
+				#	_addline=True
+				
+			myfile.close()
+			if (find != "0"):
+				# Reemplaza la linea
+				self.strReplace("/tmp/bouquets.tv", find, "#SERVICE: 1:7:1:0:0:0:0:0:0:0:userbouquetsmp.iptv.tv")
+			else:
+				#Anade una linea al fichero
+				myfile = open ("/tmp/bouquets.tv", "a")
+				# A mirar
+				#if _addline:
+				#	myfile.write("\n")	
+				myfile.write("#SERVICE: 1:7:1:0:0:0:0:0:0:0:userbouquetsmp.iptv.tv\n")
+				myfile.close()
+			# Sube el fichero al deco cliente
+			ftp.cwd("/etc/enigma2")
+			myfile = open("/tmp/bouquets.tv", 'r')
+			ftp.storlines('STOR ' + "bouquets.tv", myfile)
+			myfile.close()
+			# Sube el fichero de la lista de canales al nuevo deco
+			ftp.cwd("/etc/enigma2")
+			myfile = open("/etc/enigma2/userbouquetsmp.iptv.tv", 'r')
+			ftp.storlines('STOR ' + "userbouquetsmp.iptv.tv", myfile)
+			myfile.close()
+			
+			self.session.open(MessageBox, _("Transfer was successfully finished"), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		except ftplib.all_errors, e:
+		  	errorcode = str(e).split(None, 1)
+		  	self.session.open(MessageBox, _("Transfer was finished with errors: %s") % errorcode, type=MessageBox.TYPE_ERROR, timeout=10, close_on_any_key=True)
+		  	         
+		self.message.close()
+		
+	def strReplace(self, file, search, replace):
+		with open(file,'r') as f:
+			newlines = []
+			for line in f.readlines():
+				newlines.append(line.replace(search, replace))
+		with open(file, 'w') as f:
+			for line in newlines:
+				f.write(line)
+						
+class udpxyConfig(ConfigListScreen, Screen):
+        skin = """ 
+		<screen name="iptvconf" position="center,238" size="580,308" title="Movistar+ Iptv Server Config" backgroundColor="white">        
+		 <widget name="config" position="9,19" size="400,218" font="Regular;20" valign="center" transparent="0" backgroundColor="white" foregroundColor="black" />
+		 <widget name="key_green" position="0,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="green" transparent="0" />
+		 <widget name="key_blue" position="140,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="blue" transparent="0" />
+		 <widget name="key_yellow" position="280,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="yellow" transparent="0" />
+		 <widget name="key_red" position="420,254" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="red" transparent="0" />
+		</screen>
+        """
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		Screen.setTitle(self, _("Movistar+ Iptv Server Config"))
+		self.skinName = "iptvconf"
+		self['key_green'] = Label(_("Save"))
+		self['key_red'] = Label(_("Cancel"))
+		self['key_blue'] = Label(_("Down m3u"))
+                self['key_yellow'] = Label(_("Send Conf"))
+		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.saveIp, 'back': self.close, 'red': self.close, 'green': self.saveIp, 'yellow': self.sendConfig, 'blue': self.InstallM3u })
+		self.list = []
+                self.list.append(getConfigListEntry(_("Udpxy Server IP"), config.networkiptv.udpxyipserver))
+		self.list.append(getConfigListEntry(_("Udpxy Server port"), config.networkiptv.udpxyport))
+        	ConfigListScreen.__init__(self, self.list)
+        	self["config"].list = self.list
+        	self.Console = Console()       
+		self.lastport=config.networkiptv.udpxyport.value
+		self.lastip=config.networkiptv.udpxyipserver.getText()
+		print "Config"
+		
+	def InstallM3u(self):
+		self.pkt_name = 'enigma2-plugin-settings-openplus.movistar.iptv.vlc'
+		self.Console.ePopen('/usr/bin/opkg list_installed ' + self.pkt_name, self.checkNetworkState)
+
+	def checkNetworkState(self, str, retval, extra_args):
+		print "checkNetworkState ", str
+		if 'Collected errors' in str:
+			self.session.openWithCallback(self.close, MessageBox, _("A background update check is in progress, please wait a few minutes and try again."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		elif not str:
+			self.feedscheck = self.session.open(MessageBox,_('Please wait whilst feeds state is checked.'), MessageBox.TYPE_INFO, enable_input = False)
+			self.feedscheck.setTitle(_('Checking Feeds'))
+			cmd1 = "opkg update"
+			self.CheckConsole = Console()
+			self.CheckConsole.ePopen(cmd1, self.checkNetworkStateFinished)
+		else:
+			self.session.open(MessageBox, _("The package %s is already installed") % self.pkt_name, type=MessageBox.TYPE_ERROR, timeout=10, close_on_any_key=True)
+	
+
+	def checkNetworkStateFinished(self, result, retval,extra_args=None):
+		print "checkNetworkStateFinished ", result
+		if 'bad address' in result:
+			self.session.openWithCallback(self.InstallPackageFailed, MessageBox, _("Your %s %s is not connected to the internet, please check your network settings and try again.") % (getMachineBrand(), getMachineName()), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		elif ('wget returned 1' or 'wget returned 255' or '404 Not Found') in result:
+			self.session.openWithCallback(self.InstallPackageFailed, MessageBox, _("Sorry feeds are down for maintenance, please try again later."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		else:
+			self.session.openWithCallback(self.InstallPackage,MessageBox,_('The package will be  installed in your %s %s\nReady to install %s ?')  % (getMachineBrand(), getMachineName(), self.pkt_name), MessageBox.TYPE_YESNO)
+
+	def InstallPackage(self, val):
+		if val:
+			self.doInstall(self.installComplete, self.pkt_name)
+		else:
+			self.feedscheck.close()
+			self.close()
+
+	def InstallPackageFailed(self, val):
+		print "Install Package Failed"
+		self.feedscheck.close()
+		self.close()
+
+	def doInstall(self, callback, pkgname):
+		print "doInstall " ,callback, self.pkt_name
+		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
+		self.message.setTitle(_('Installing Package'))
+		self.Console.ePopen('/usr/bin/opkg install %s' % self.pkt_name, callback)
+
+	def installComplete(self,result = None, retval = None, extra_args = None):
+		print "Instalation finished"
+		self.feedscheck.close()
+		self.message.close()
+		self.close()
+		
+	def sendConfig(self):
+		self.session.open(udpxySendConfig)
+
+	def saveIp(self):
+		config.networkiptv.udpxyport.save()
+		config.networkiptv.udpxyipserver.save()
+		configfile.save()
+		self.strReplace("/etc/enigma2/userbouquetsmp.iptv.tv", str(self.lastport), str(config.networkiptv.udpxyport.value))
+		self.strReplace("/etc/init.d/udpxy", str(self.lastport), str(config.networkiptv.udpxyport.value))
+		self.strReplace("/etc/enigma2/userbouquetsmp.iptv.tv", self.lastip, config.networkiptv.udpxyipserver.getText())
+		self.lastport=config.networkiptv.udpxyport.value
+		self.lastip=config.networkiptv.udpxyipserver.getText()
+		self.Console.ePopen('killall -9 udpxy; /etc/init.d/udpxy start')
+		# Reload settings
+		from enigma import eDVBDB
+		eDVBDB.getInstance().reloadBouquets()
+		eDVBDB.getInstance().reloadServicelist()
+		self.mbox = self.session.open(MessageBox,(_("Configuration is saved and service restarted")), MessageBox.TYPE_INFO, timeout = 4 )
+		
+	def strReplace(self, file, search, replace):
+		with open(file,'r') as f:
+			newlines = []
+			for line in f.readlines():
+                		newlines.append(line.replace(search, replace))
+                with open(file, 'w') as f:
+                    for line in newlines:
+                            f.write(line)	                        
+
+class udpxyServer(Screen):
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		Screen.setTitle(self, _("Movistar+ Iptv Server"))
+		self.skinName = "NetworkNfs"
+		self.onChangedEntry = [ ]
+		self['lab1'] = Label(_("Autostart:"))
+		self['labactive'] = Label(_(_("Disabled")))
+		self['lab2'] = Label(_("Current Status:"))
+		self['labstop'] = Label(_("Stopped"))
+		self['labrun'] = Label(_("Running"))
+		self['key_green'] = Label(_("Start"))
+		self['key_red'] = Label(_("Remove Service"))
+		self['key_yellow'] = Label(_("Autostart"))
+		self['key_blue'] = Label(_("Config"))
+		self.Console = Console()
+		self.my_mitv_active = False
+		self.my_mitv_run = False
+		self['actions'] = ActionMap(['WizardActions', 'ColorActions'], {'ok': self.close, 'back': self.close, 'red': self.UninstallCheck, 'green': self.udpxyServerStartStop, 'yellow': self.udpxyServerSet, 'blue': self.udpxyCfg })
+		self.service_name = 'enigma2-plugin-extensions-udpxyserver'
+		self.onLayoutFinish.append(self.InstallCheck)
+	
+	def udpxyCfg(self):
+		self.session.open(udpxyConfig)
+
+	def InstallCheck(self):
+		print '/usr/bin/opkg list_installed ' + self.service_name
+		self.Console.ePopen('/usr/bin/opkg list_installed ' + self.service_name, self.checkNetworkState)
+
+	def checkNetworkState(self, str, retval, extra_args):
+		print "checkNetworkState ", str
+		if 'Collected errors' in str:
+			self.session.openWithCallback(self.close, MessageBox, _("A background update check is in progress, please wait a few minutes and try again."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		elif not str:
+			self.feedscheck = self.session.open(MessageBox,_('Please wait whilst feeds state is checked.'), MessageBox.TYPE_INFO, enable_input = False)
+			self.feedscheck.setTitle(_('Checking Feeds'))
+			cmd1 = "opkg update"
+			self.CheckConsole = Console()
+			self.CheckConsole.ePopen(cmd1, self.checkNetworkStateFinished)
+		else:
+			self.updateService()
+
+	def checkNetworkStateFinished(self, result, retval,extra_args=None):
+		print "checkNetworkStateFinished ", result
+		if 'bad address' in result:
+			self.session.openWithCallback(self.InstallPackageFailed, MessageBox, _("Your %s %s is not connected to the internet, please check your network settings and try again.") % (getMachineBrand(), getMachineName()), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		elif ('wget returned 1' or 'wget returned 255' or '404 Not Found') in result:
+			self.session.openWithCallback(self.InstallPackageFailed, MessageBox, _("Sorry feeds are down for maintenance, please try again later."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+		else:
+			self.session.openWithCallback(self.InstallPackage,MessageBox,_('Your %s %s will be restarted after the installation of service\nReady to install %s ?')  % (getMachineBrand(), getMachineName(), self.service_name), MessageBox.TYPE_YESNO)
+
+	def InstallPackage(self, val):
+		print "InstallPackage ", val
+		if val:
+			self.doInstall(self.installComplete, self.service_name)
+		else:
+			self.feedscheck.close()
+			self.close()
+
+	def InstallPackageFailed(self, val):
+		print "InstallPackageFailed"
+		self.feedscheck.close()
+		self.close()
+
+	def doInstall(self, callback, pkgname):
+		print "doInstall " ,callback, pkgname
+		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
+		self.message.setTitle(_('Installing Service'))
+		self.Console.ePopen('/usr/bin/opkg install enigma2-plugin-extensions-udpxyserver', callback)
+
+	def installComplete(self,result = None, retval = None, extra_args = None):
+		self.session.open(TryQuitMainloop, 2)
+
+	def UninstallCheck(self):
+		self.Console.ePopen('/usr/bin/opkg list_installed ' + self.service_name, self.RemovedataAvail)
+
+	def RemovedataAvail(self, str, retval, extra_args):
+		if str:
+			restartbox = self.session.openWithCallback(self.RemovePackage,MessageBox,_('Your %s %s will be restarted after the removal of service\nDo you want to remove now ?') % (getMachineBrand(), getMachineName()), MessageBox.TYPE_YESNO)
+			restartbox.setTitle(_('Ready to remove %s ?') % self.service_name)
+		else:
+			self.updateService()
+
+	def RemovePackage(self, val):
+		if val:
+			self.doRemove(self.removeComplete, self.service_name)
+
+	def doRemove(self, callback, pkgname):
+		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
+		self.message.setTitle(_('Removing Service'))
+		self.Console.ePopen('/usr/bin/opkg remove ' + pkgname + ' --force-remove --autoremove --force-depends', callback)
+
+	def removeComplete(self,result = None, retval = None, extra_args = None):
+		self.session.open(TryQuitMainloop, 2)
+
+	def createSummary(self):
+		return NetworkServicesSummary
+
+	def udpxyServerStartStop(self):
+		if not self.my_mitv_run:
+			self.Console.ePopen('/etc/init.d/udpxy start', self.StartStopCallback)
+		elif self.my_mitv_run:
+			self.Console.ePopen('/etc/init.d/udpxy stop', self.StartStopCallback)
+
+	def StartStopCallback(self, result = None, retval = None, extra_args = None):
+		time.sleep(3)
+		self.updateService()
+
+	def udpxyServerSet(self):
+		if fileExists('/etc/rc3.d/S99udpxy'):
+			self.Console.ePopen('update-rc.d -f udpxy remove', self.StartStopCallback)
+		else:
+			self.Console.ePopen('update-rc.d -f udpxy defaults 99', self.StartStopCallback)
+
+	def updateService(self):
+		import process
+		p = process.ProcessList()
+		mitv_process = str(p.named('udpxy')).strip('[]')
+		self['labrun'].hide()
+		self['labstop'].hide()
+		self['labactive'].setText(_("Disabled"))
+		self.my_mitv_active = False
+		self.my_mitv_run = False
+		if fileExists('/etc/rc3.d/S99udpxy'):
+			self['labactive'].setText(_("Enabled"))
+			self['labactive'].show()
+			self.my_mitv_active = True
+		if mitv_process:
+			self.my_mitv_run = True
+		if self.my_mitv_run:
+			self['labstop'].hide()
+			self['labrun'].show()
+			self['key_green'].setText(_("Stop"))
+			status_summary= self['lab2'].text + ' ' + self['labrun'].text
+		else:
+			self['labstop'].show()
+			self['labrun'].hide()
+			self['key_green'].setText(_("Start"))
+			status_summary= self['lab2'].text + ' ' + self['labstop'].text
+		title = _("Movistar+ Iptv Server")
+		autostartstatus_summary = self['lab1'].text + ' ' + self['labactive'].text
+
+		for cb in self.onChangedEntry:
+			cb(title, status_summary, autostartstatus_summary)

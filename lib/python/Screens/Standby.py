@@ -3,15 +3,14 @@ from Components.ActionMap import ActionMap
 from Components.config import config
 from Components.AVSwitch import AVSwitch
 from Components.SystemInfo import SystemInfo
+from Components.Harddisk import harddiskmanager
 from GlobalActions import globalActionMap
-from enigma import eDVBVolumecontrol, eTimer, eServiceReference, pNavigation
+from enigma import eDVBVolumecontrol, eTimer, eDVBLocalTimeHandler, eServiceReference
 from boxbranding import getMachineBrand, getMachineName, getBoxType, getBrandOEM
 from Tools import Notifications
 from time import localtime, time
 import Screens.InfoBar
 from gettext import dgettext
-import PowerTimer
-import RecordTimer
 import Components.RecordingConfig
 
 inStandby = None
@@ -26,7 +25,7 @@ def setLCDModeMinitTV(value):
 
 class Standby2(Screen):
 	def Power(self):
-		print "leave standby"
+		print "[Standby] leave standby"
 		if (getBrandOEM() in ('fulan')):
 			open("/proc/stb/hdmi/output", "w").write("on")
 		#set input to encoder
@@ -37,16 +36,13 @@ class Standby2(Screen):
 		# set LCDminiTV 
 		if SystemInfo["Display"] and SystemInfo["LCDMiniTV"]:
 			setLCDModeMinitTV(config.lcd.modeminitv.value)
-		#remove wakup files and reset wakup state
-		PowerTimer.resetTimerWakeup()
-		RecordTimer.resetTimerWakeup()
 		#kill me
 		self.close(True)
 
 	def setMute(self):
 		if eDVBVolumecontrol.getInstance().isMuted():
 			self.wasMuted = 1
-			print "mute already active"
+			print "[Standby] mute already active"
 		else:
 			self.wasMuted = 0
 			eDVBVolumecontrol.getInstance().volumeToggleMute()
@@ -60,7 +56,7 @@ class Standby2(Screen):
 		self.skinName = "Standby"
 		self.avswitch = AVSwitch()
 
-		print "enter standby"
+		print "[Standby] enter standby"
 
 		self["actions"] = ActionMap( [ "StandbyActions" ],
 		{
@@ -70,7 +66,9 @@ class Standby2(Screen):
 
 		globalActionMap.setEnabled(False)
 
-		self.standbyTimeUnknownTimer = eTimer()
+		self.standbyStopServiceTimer = eTimer()
+		self.standbyStopServiceTimer.callback.append(self.stopService)
+		self.timeHandler = None
 
 		#mute adc
 		self.setMute()
@@ -82,20 +80,23 @@ class Standby2(Screen):
 		self.paused_service = None
 		self.prev_running_service = None
 
-		if self.session.current_dialog:
-			if self.session.current_dialog.ALLOW_SUSPEND == Screen.SUSPEND_STOPS:
-				if localtime(time()).tm_year > 1970 and self.session.nav.getCurrentlyPlayingServiceOrGroup():
-					if config.servicelist.startupservice_standby.value:
-						self.prev_running_service = eServiceReference(config.servicelist.startupservice_standby.value)
-					else:
-						self.prev_running_service = self.session.nav.getCurrentlyPlayingServiceOrGroup()
-					self.session.nav.stopService()
-				else:
-					self.standbyTimeUnknownTimer.callback.append(self.stopService)
-					self.standbyTimeUnknownTimer.startLongTimer(60)
-			elif self.session.current_dialog.ALLOW_SUSPEND == Screen.SUSPEND_PAUSES:
+		self.prev_running_service = self.session.nav.getCurrentlyPlayingServiceOrGroup()
+		service = self.prev_running_service and self.prev_running_service.toString()
+		if service:
+			if service.startswith("1:") and service.rsplit(":", 1)[1].startswith("/"):
 				self.paused_service = self.session.current_dialog
 				self.paused_service.pauseService()
+			else:
+				self.timeHandler =  eDVBLocalTimeHandler.getInstance()
+				if self.timeHandler.ready():
+					if self.session.nav.getCurrentlyPlayingServiceOrGroup():
+						self.stopService()
+					else:
+						self.standbyStopServiceTimer.startLongTimer(5)
+					self.timeHandler = None
+				else:
+					self.timeHandler.m_timeUpdated.get().append(self.stopService)
+
 		if self.session.pipshown:
 			from Screens.InfoBar import InfoBar
 			InfoBar.instance and hasattr(InfoBar.instance, "showPiP") and InfoBar.instance.showPiP()
@@ -107,19 +108,33 @@ class Standby2(Screen):
 			self.avswitch.setInput("AUX")
 		if (getBrandOEM() in ('fulan')):
 			open("/proc/stb/hdmi/output", "w").write("off")
+
+		if int(config.usage.hdd_standby_in_standby.value) != -1: # HDD standby timer value (box in standby) / -1 = same as when box is active
+			for hdd in harddiskmanager.HDDList():
+				hdd[1].setIdleTime(int(config.usage.hdd_standby_in_standby.value))
+
 		self.onFirstExecBegin.append(self.__onFirstExecBegin)
 		self.onClose.append(self.__onClose)
 
 	def __onClose(self):
 		global inStandby
 		inStandby = None
-		self.standbyTimeUnknownTimer.stop()
-		if self.prev_running_service:
-			self.session.nav.playService(self.prev_running_service)
-		elif self.paused_service:
+		self.standbyStopServiceTimer.stop()
+		self.timeHandler and self.timeHandler.m_timeUpdated.get().remove(self.stopService)
+		if self.paused_service:
 			self.paused_service.unPauseService()
+		elif self.prev_running_service:
+			service = self.prev_running_service.toString()
+			if config.servicelist.startupservice_onstandby.value:
+				self.session.nav.playService(eServiceReference(config.servicelist.startupservice.value))
+				from Screens.InfoBar import InfoBar
+				InfoBar.instance and InfoBar.instance.servicelist.correctChannelNumber()
+			else:
+				self.session.nav.playService(self.prev_running_service)
 		self.session.screen["Standby"].boolean = False
 		globalActionMap.setEnabled(True)
+		for hdd in harddiskmanager.HDDList():
+			hdd[1].setIdleTime(int(config.usage.hdd_standby.value)) # HDD standby timer value (box active)
 
 	def __onFirstExecBegin(self):
 		global inStandby
@@ -131,10 +146,6 @@ class Standby2(Screen):
 		return StandbySummary
 
 	def stopService(self):
-		if config.servicelist.startupservice_standby.value:
-			self.prev_running_service = eServiceReference(config.servicelist.startupservice_standby.value)
-		else:
-			self.prev_running_service = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 		self.session.nav.stopService()
 
 class Standby(Standby2):
@@ -195,6 +206,7 @@ class QuitMainloopScreen(Screen):
 		self["text"] = Label(text)
 
 inTryQuitMainloop = False
+quitMainloopCode = 1
 
 class TryQuitMainloop(MessageBox):
 	def __init__(self, session, retvalue=1, timeout=-1, default_yes = True):
@@ -212,7 +224,7 @@ class TryQuitMainloop(MessageBox):
 #			reason = (ngettext("%d job is running in the background!", "%d jobs are running in the background!", jobs) % jobs) + '\n'
 #			if jobs == 1:
 #				job = job_manager.getPendingJobs()[0]
-#				if job.name == "VFD Checker":		
+#				if job.name == "VFD Checker":
 #					reason = ""
 #				else:
 #					reason += "%s: %s (%d%%)\n" % (job.getStatustext(), job.name, int(100*job.progress/float(job.end)))
@@ -235,7 +247,7 @@ class TryQuitMainloop(MessageBox):
 				3: _("Really restart now?"),
 				4: _("Really upgrade the frontprocessor and reboot now?"),
 				42: _("Really upgrade your %s %s and reboot now?") % (getMachineBrand(), getMachineName()),
-				43: _("Really reflash your %s %s and reboot now?") % (getMachineBrand(), getMachineName()),				
+				43: _("Really reflash your %s %s and reboot now?") % (getMachineBrand(), getMachineName()),
 				44: _("Really upgrade the front panel and reboot now?"),
 				45: _("Really WOL now?")}.get(retvalue)
 			if text:
@@ -267,8 +279,9 @@ class TryQuitMainloop(MessageBox):
 				self.stopTimer()
 
 	def close(self, value):
+		global quitMainloopCode
 		if self.connected:
-			self.conntected=False
+			self.connected=False
 			self.session.nav.record_event.remove(self.getRecordEvent)
 		if value:
 			self.hide()
@@ -278,6 +291,9 @@ class TryQuitMainloop(MessageBox):
 			self.quitScreen = self.session.instantiateDialog(QuitMainloopScreen,retvalue=self.retval)
 			self.quitScreen.show()
 			print "[Standby] quitMainloop #1"
+			quitMainloopCode = self.retval
+			if getBoxType() == "vusolo4k":  #workaround for white display flash
+				open("/proc/stb/fp/oled_brightness", "w").write("0")
 			quitMainloop(self.retval)
 		else:
 			MessageBox.close(self, True)
