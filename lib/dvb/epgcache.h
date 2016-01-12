@@ -210,7 +210,7 @@ public:
 	}
 	time_t getStartTime()
 	{
-		return parseDVBtime(EITdata[2], EITdata[3], EITdata[4], EITdata[5], EITdata[6]);
+		return parsetime(EITdata[2], EITdata[3], EITdata[4], EITdata[5], EITdata[6]);
 	}
 	int getDuration()
 	{
