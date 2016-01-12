@@ -718,7 +718,7 @@ void eEPGCache::sectionRead(const uint8_t *data, int source, channel_data *chann
 	int eit_event_size;
 	int duration;
 
-	time_t TM = parseDVBtime(
+	time_t TM = parsetime(
 			eit_event->start_time_1,
 			eit_event->start_time_2,
 			eit_event->start_time_3,
@@ -742,7 +742,7 @@ void eEPGCache::sectionRead(const uint8_t *data, int source, channel_data *chann
 		eit_event_size = HILO(eit_event->descriptors_loop_length)+EIT_LOOP_SIZE;
 
 		duration = fromBCD(eit_event->duration_1)*3600+fromBCD(eit_event->duration_2)*60+fromBCD(eit_event->duration_3);
-		TM = parseDVBtime(
+		TM = parsetime(
 			eit_event->start_time_1,
 			eit_event->start_time_2,
 			eit_event->start_time_3,
@@ -3503,7 +3503,7 @@ struct date_time
 	date_time( const uint8_t data[5])
 	{
 		memcpy(this->data, data, 5);
-		tm = parseDVBtime(data[0], data[1], data[2], data[3], data[4]);
+		tm = parsetime(data[0], data[1], data[2], data[3], data[4]);
 	}
 	date_time()
 	{
@@ -5124,3 +5124,33 @@ void eEPGCache::crossepgImportEPGv21(std::string dbroot)
 	eDebug("[EPGC] imported %d events from crossepg db", events_count);
 	eDebug("[EPGC] %i bytes for cache used", eventData::CacheSize);
 }
+
+
+time_t parsetime(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint16_t *hash)
+{
+	tm t;
+	t.tm_sec=fromBCD(t5);
+	t.tm_min=fromBCD(t4);
+	t.tm_hour=fromBCD(t3);
+	int mjd=(t1<<8)|t2;
+	int k;
+
+	t.tm_year = (int) ((mjd - 15078.2) / 365.25);
+	t.tm_mon = (int) ((mjd - 14956.1 - (int)(t.tm_year * 365.25)) / 30.6001);
+	t.tm_mday = (int) (mjd - 14956 - (int)(t.tm_year * 365.25) - (int)(t.tm_mon * 30.6001));
+	k = (t.tm_mon == 14 || t.tm_mon == 15) ? 1 : 0;
+	t.tm_year = t.tm_year + k;
+	t.tm_mon = t.tm_mon - 1 - k * 12;
+	t.tm_mon--;
+
+	t.tm_isdst =  0;
+	t.tm_gmtoff = 0;
+
+	if (hash) {
+		*hash = t.tm_hour * 60 + t.tm_min;
+		*hash |= t.tm_mday << 11;
+	}
+
+	return timegm(&t);
+}
+

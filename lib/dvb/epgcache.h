@@ -219,6 +219,8 @@ public:
 };
 #endif
 
+time_t parsetime(__u8 t1, __u8 t2, __u8 t3, __u8 t4, __u8 t5, __u16 *hash=0);
+
 #ifdef ENABLE_FREESAT
 #include <bitset>
 class freesatEITSubtableStatus
