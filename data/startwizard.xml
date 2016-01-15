@@ -201,7 +201,7 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
-<!--
+
 		<step id="channels">
 			<condition>
 from Components.NimManager import nimmanager
@@ -216,7 +216,7 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
- -->
+
 		<step id="scanquestion">
 			<text value="Do you want to do a service scan?" />
 			<displaytext value="Do you want to do a service scan?" />
