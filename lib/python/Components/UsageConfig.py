@@ -67,10 +67,10 @@ def InitUsageConfig():
 	config.usage.panicbutton = ConfigYesNo(default = False)
 	config.usage.panicchannel = ConfigInteger(default = 1, limits=(1,5000) )
 	config.usage.quickzap_bouquet_change = ConfigYesNo(default = False)
-	config.usage.e1like_radio_mode = ConfigYesNo(default = True)
+	config.usage.e1like_radio_mode = ConfigYesNo(default = False)
 
 	choicelist = []
-	for i in range(1, 21):
+	for i in range(1, 30):
 		choicelist.append(("%d" % i, ngettext("%d second", "%d seconds", i) % i))
 	config.usage.infobar_timeout = ConfigSelection(default = "5", choices = [("0", _("No timeout"))] + choicelist)
 	config.usage.show_infobar_on_zap = ConfigYesNo(default = True)
@@ -81,7 +81,7 @@ def InitUsageConfig():
 	config.usage.show_infobar_do_dimming = ConfigYesNo(default = False)
 	config.usage.show_infobar_dimming_speed = ConfigSelectionNumber(min = 1, max = 40, stepwidth = 1, default = 10, wraparound = True)
 	config.usage.show_infobar_channel_number = ConfigYesNo(default = False)
-	config.usage.show_second_infobar = ConfigSelection(default = "1", choices = [("0", _("Off")), ("1", _("Event Info")), ("2", _("2nd Infobar INFO")), ("3", _("2nd Infobar ECM"))])
+	config.usage.show_second_infobar = ConfigSelection(default = "2", choices = [("0", _("Off")), ("1", _("Event Info")), ("2", _("2nd Infobar INFO")), ("3", _("2nd Infobar ECM"))])
 	config.usage.second_infobar_timeout = ConfigSelection(default = "5", choices = [("0", _("No timeout"))] + choicelist)
 	def showsecondinfobarChanged(configElement):
 		if config.usage.show_second_infobar.value != "INFOBAREPG":
