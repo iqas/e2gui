@@ -1135,7 +1135,10 @@ class InfoBarNumberZap:
 								serviceIterator = servicelist.getNext()
 								while serviceIterator.valid():
 									service, bouquet2 = self.searchNumber(config.usage.panicchannel.value)
-									if service == serviceIterator: break
+									try:
+										if service == serviceIterator: break 
+									except:
+										print "Error - service in debug"
 									serviceIterator = servicelist.getNext()
 								if serviceIterator.valid() and service == serviceIterator: break
 					self.servicelist.enterPath(rootbouquet)
