@@ -144,7 +144,7 @@ class EPGList(HTMLComponent, GUIComponent):
 
 		self.foreColor = 0x000000
 		self.foreColorSelected = 0xffffff
-		self.backColor = 0x2D455E
+		self.backColor = 0x939FAC
 		self.backColorSelected = 0xd69600
 		self.foreColorService = 0xffffff
 		self.backColorService = 0x2D455E
