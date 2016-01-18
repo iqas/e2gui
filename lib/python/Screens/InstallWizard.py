@@ -45,8 +45,8 @@ class InstallWizard(Screen, ConfigListScreen):
 				self.createMenu()
 		elif self.index == self.STATE_CHOISE_CHANNELLIST:
 			self.enabled = ConfigYesNo(default = True)
-			modes = {"19e.iplus": "Astra", "19e.13e.iplus": "Astra-Hotbird", "19e.com.iplus": "Astra Comunitarias", "motor.iplus": "Motor", "19e.30w.iplus": "Astra-Hispasat"}
-			self.channellist_type = ConfigSelection(choices = modes, default = "19e.iplus")
+			modes = {"settings.astra": "Astra", "settings.hispasat": "Hispasat"}
+			self.channellist_type = ConfigSelection(choices = modes, default = "settings.astra")
 			self.createMenu()
 # 		elif self.index == self.STATE_CHOISE_SOFTCAM:
 # 			self.enabled = ConfigYesNo(default = True)
@@ -104,7 +104,7 @@ class InstallWizard(Screen, ConfigListScreen):
 			if config.misc.installwizard.hasnetwork.value:
 				self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (updating packages)'), IpkgComponent.CMD_UPDATE)
 		elif self.index == self.STATE_CHOISE_CHANNELLIST and self.enabled.value and self.channellist_type.value != "19e.iplus":
-			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading channel list)'), IpkgComponent.CMD_REMOVE, {'package': 'enigma2-plugin-settings-sorys.' + self.channellist_type.value})
+			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading channel list)'), IpkgComponent.CMD_REMOVE, {'package': 'enigma2-plugin-settings-openplus.' + self.channellist_type.value})
 # 		elif self.index == self.STATE_CHOISE_SOFTCAM and self.enabled.value:
 # 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading softcam)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-softcams-' + self.softcam_type.value})
 		return
