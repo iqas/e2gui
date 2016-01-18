@@ -4147,7 +4147,7 @@ class udpxyConfig(ConfigListScreen, Screen):
 		if 'Collected errors' in str:
 			self.session.openWithCallback(self.close, MessageBox, _("A background update check is in progress, please wait a few minutes and try again."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
 		elif not str:
-			self.feedscheck = self.session.open(MessageBox,_('Please wait whilst feeds state is checked.'), MessageBox.TYPE_INFO, enable_input = False)
+			self.feedscheck = self.session.open(MessageBox,_('Please wait while feeds state is checked.'), MessageBox.TYPE_INFO, enable_input = False)
 			self.feedscheck.setTitle(_('Checking Feeds'))
 			cmd1 = "opkg update"
 			self.CheckConsole = Console()
@@ -4285,7 +4285,7 @@ class udpxyServer(Screen):
 		print "doInstall " ,callback, pkgname
 		self.message = self.session.open(MessageBox,_("please wait..."), MessageBox.TYPE_INFO, enable_input = False)
 		self.message.setTitle(_('Installing Service'))
-		self.Console.ePopen('/usr/bin/opkg install enigma2-plugin-extensions-udpxyserver', callback)
+		self.Console.ePopen('/usr/bin/opkg install enigma2-plugin-extensions-udpxyserver && /usr/bin/opkg install enigma2-plugin-settings-openplus.movistar.e2.iptv', callback)
 
 	def installComplete(self,result = None, retval = None, extra_args = None):
 		self.session.open(TryQuitMainloop, 2)
