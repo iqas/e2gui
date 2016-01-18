@@ -142,7 +142,7 @@ class EPGList(HTMLComponent, GUIComponent):
 		self.borderColor = 0xC0C0C0
 		self.borderColorService = 0xC0C0C0
 
-		self.foreColor = 0xffffff
+		self.foreColor = 0x000000
 		self.foreColorSelected = 0xffffff
 		self.backColor = 0x2D455E
 		self.backColorSelected = 0xd69600
@@ -172,18 +172,18 @@ class EPGList(HTMLComponent, GUIComponent):
 		self.eventFontNameInfobar = "Regular"
 
 		if self.screenwidth and self.screenwidth == 1920:
-			self.serviceFontSizeGraph = 30
-			self.eventFontSizeGraph = 27
-			self.eventFontSizeSingle = 33
-			self.eventFontSizeMulti = 33
-			self.serviceFontSizeInfobar = 30
-			self.eventFontSizeInfobar = 33
+			self.serviceFontSizeGraph = 22
+			self.eventFontSizeGraph = 20
+			self.eventFontSizeSingle = 24
+			self.eventFontSizeMulti = 22
+			self.serviceFontSizeInfobar = 24
+			self.eventFontSizeInfobar = 25
 		else:
 			self.serviceFontSizeGraph = 20
 			self.eventFontSizeGraph = 18
-			self.eventFontSizeSingle = 22
-			self.eventFontSizeMulti = 22
-			self.serviceFontSizeInfobar = 20
+			self.eventFontSizeSingle = 21
+			self.eventFontSizeMulti = 18
+			self.serviceFontSizeInfobar = 18
 			self.eventFontSizeInfobar = 22
 
 		self.listHeight = None
@@ -718,14 +718,14 @@ class EPGList(HTMLComponent, GUIComponent):
 		r3 = self.descr_rect
 		r4 = self.start_end_rect
 		if self.screenwidth and self.screenwidth == 1920:
-			fact1 = 120
-			fact2 = 135
-			fact3 = 30
-			borderw = 1
-		else:
 			fact1 = 80
 			fact2 = 90
 			fact3 = 20
+			borderw = 1
+		else:
+			fact1 = 60
+			fact2 = 90
+			fact3 = 15
 			borderw = 1
 		res = [None, (eListboxPythonMultiContent.TYPE_TEXT, r1.x, r1.y, r1.w, r1.h, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, service_name)] # no private data needed
 		if beginTime is not None:
@@ -752,9 +752,9 @@ class EPGList(HTMLComponent, GUIComponent):
 				if self.wasEntryAutoTimer and clock_types in (2,7,12):
 					if self.screenwidth and self.screenwidth == 1920:
 						res.extend((
-							(eListboxPythonMultiContent.TYPE_TEXT, r3.x + 135, r3.y, r3.w-185, r3.h, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, EventName),
-							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-25, (r3.h/2-13), 25, 25, self.clocks[clock_types]),
-							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-50, (r3.h/2-13), 25, 25, self.autotimericon)
+							(eListboxPythonMultiContent.TYPE_TEXT, r3.x + 90, r3.y, r3.w-132, r3.h, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, EventName),
+							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-21, (r3.h/2-11), 21, 21, self.clocks[clock_types]),
+							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-42, (r3.h/2-11), 21, 21, self.autotimericon)
 						))
 					else:
 						res.extend((
@@ -765,8 +765,8 @@ class EPGList(HTMLComponent, GUIComponent):
 				else:
 					if self.screenwidth and self.screenwidth == 1920:
 						res.extend((
-							(eListboxPythonMultiContent.TYPE_TEXT, r3.x + 135, r3.y, r3.w-160, r3.h, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, EventName),
-							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-25, (r3.h/2-13), 25, 25, self.clocks[clock_types])
+							(eListboxPythonMultiContent.TYPE_TEXT, r3.x + 90, r3.y, r3.w-111, r3.h, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, EventName),
+							(eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, pos-21, (r3.h/2-11), 21, 21, self.clocks[clock_types])
 						))
 					else:
 						res.extend((
@@ -1402,7 +1402,7 @@ class TimelineText(HTMLComponent, GUIComponent):
 		self.timelineFontName = "Regular"
 		self.screenwidth = getDesktop(0).size().width()
 		if self.screenwidth and self.screenwidth == 1920:
-			self.timelineFontSize = 30
+			self.timelineFontSize = 22
 		else:
 			self.timelineFontSize = 20
 		self.timelineAlign = 'left'
@@ -1607,7 +1607,7 @@ class EPGBouquetList(HTMLComponent, GUIComponent):
 		self.bouquetFontName = "Regular"
 		self.screenwidth = getDesktop(0).size().width()
 		if self.screenwidth and self.screenwidth == 1920:
-			self.bouquetFontSize = 30
+			self.bouquetFontSize = 26
 		else:
 			self.bouquetFontSize = 20
 
