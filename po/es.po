@@ -4539,7 +4539,7 @@ msgstr "Selección de idioma"
 
 #
 msgid "Hotkey Setup"
-msgstr "Configurar teclas"
+msgstr "Configurar teclas del mando"
 
 msgid "Show service list"
 msgstr "Mostrar lista de canales"
@@ -15289,7 +15289,7 @@ msgstr "Personalizar"
 
 # Quick Menue
 msgid "Button Setup"
-msgstr "Configurar teclas"
+msgstr "Configurar función de teclas"
 
 #
 msgid "Button setup"
@@ -17513,3 +17513,9 @@ msgstr "Viento:"
 #: meteo
 msgid "Current:"
 msgstr "Actual:"
+
+msgid "Signal Finder"
+msgstr "Buscador de Señal"
+
+msgid "Extended GUI"
+msgstr "Ajustes extendidos GUI"
