@@ -174,10 +174,10 @@ class EPGList(HTMLComponent, GUIComponent):
 		if self.screenwidth and self.screenwidth == 1920:
 			self.serviceFontSizeGraph = 22
 			self.eventFontSizeGraph = 20
-			self.eventFontSizeSingle = 24
+			self.eventFontSizeSingle = 23
 			self.eventFontSizeMulti = 22
-			self.serviceFontSizeInfobar = 24
-			self.eventFontSizeInfobar = 25
+			self.serviceFontSizeInfobar = 23
+			self.eventFontSizeInfobar = 24
 		else:
 			self.serviceFontSizeGraph = 20
 			self.eventFontSizeGraph = 18
@@ -720,10 +720,10 @@ class EPGList(HTMLComponent, GUIComponent):
 		if self.screenwidth and self.screenwidth == 1920:
 			fact1 = 80
 			fact2 = 90
-			fact3 = 20
+			fact3 = 15
 			borderw = 1
 		else:
-			fact1 = 60
+			fact1 = 70
 			fact2 = 90
 			fact3 = 15
 			borderw = 1
