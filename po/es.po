@@ -4539,7 +4539,7 @@ msgstr "Selección de idioma"
 
 #
 msgid "Hotkey Setup"
-msgstr "Configurar teclas"
+msgstr "Configurar teclas del mando"
 
 msgid "Show service list"
 msgstr "Mostrar lista de canales"
@@ -9838,14 +9838,14 @@ msgid ""
 "Please press OK if you can see this page on your TV (or select a different "
 "input port).\n"
 "\n"
-"The next input port will be automatically probed in 20 seconds."
+"The next input port will be automatically probed in 10 seconds."
 msgstr ""
 "Selección de entrada de vídeo.\n"
 "\n"
 "Pulsa ‘OK’ si puedes ver esta página en tu TV (o selecciona otro puerto de "
 "entrada).\n"
 "\n"
-"El siguiente puerto de entrada se examinará automáticamente en 20 segundos."
+"El siguiente puerto de entrada se examinará automáticamente en 10 segundos."
 
 #
 msgid "Video mode selection."
@@ -15289,7 +15289,7 @@ msgstr "Personalizar"
 
 # Quick Menue
 msgid "Button Setup"
-msgstr "Configurar teclas"
+msgstr "Configurar función de teclas"
 
 #
 msgid "Button setup"
@@ -17028,7 +17028,7 @@ msgid "Time range:"
 msgstr "Intervalo de tiempo:"
 
 msgid "Usage & GUI"
-msgstr "Uso y GUI"
+msgstr "Configurar Interfaz y uso"
 
 msgid "Recordings & Timeshift"
 msgstr "Grabaciones y Timeshift"
@@ -17513,3 +17513,9 @@ msgstr "Viento:"
 #: meteo
 msgid "Current:"
 msgstr "Actual:"
+
+msgid "Signal Finder"
+msgstr "Buscador de Señal"
+
+msgid "Extended GUI"
+msgstr "Ajustes extendidos GUI"
