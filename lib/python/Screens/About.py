@@ -26,19 +26,22 @@ def getAboutText():
 		AboutText += _("Chipset:\t\t%s") % about.getChipSetString() + "\n"
 
 	cpuMHz = ""
-	if path.exists('/proc/cpuinfo'):
-		f = open('/proc/cpuinfo', 'r')
-		temp = f.readlines()
-		f.close()
-		try:
-			for lines in temp:
-				lisp = lines.split(': ')
-				if lisp[0].startswith('cpu MHz'):
-					#cpuMHz = "   (" +  lisp[1].replace('\n', '') + " MHz)"
-					cpuMHz = "   (" +  str(int(float(lisp[1].replace('\n', '')))) + " MHz)"
-					break
-		except:
-			pass
+        if getBoxType() in ('vusolo4k'):
+                cpuMHz = "   (1,5 GHz)"
+        else:
+                if path.exists('/proc/cpuinfo'):
+                        f = open('/proc/cpuinfo', 'r')
+                        temp = f.readlines()
+                        f.close()
+                        try:
+                                for lines in temp:
+                                        lisp = lines.split(': ')
+                                        if lisp[0].startswith('cpu MHz'):
+                                                #cpuMHz = "   (" +  lisp[1].replace('\n', '') + " MHz)"
+                                                cpuMHz = "   (" +  str(int(float(lisp[1].replace('\n', '')))) + " MHz)"
+                                                break
+                        except:
+                                pass                    
 
 	AboutText += _("CPU:\t\t%s") % about.getCPUString() + cpuMHz + "\n"
 	AboutText += _("Cores:\t\t%s") % about.getCpuCoresString() + "\n"
@@ -53,10 +56,14 @@ def getAboutText():
 	day = string[6:8]
 	driversdate = '-'.join((year, month, day))
 	AboutText += _("Drivers:\t\t%s") % driversdate + "\n"
+        
+        AboutText += _("GStreamer:\t\t%s") % about.getGStreamerVersionString() + "\n"
+        AboutText += _("Python:\t\t%s") % about.getPythonVersionString() + "\n"
+        
+        AboutText += _("Installed:\t\t%s") % about.getFlashDateString() + "\n"
+	AboutText += _("Last update:\t%s") % getEnigmaVersionString() + "\n"
 
-	AboutText += _("Last update:\t%s") % getEnigmaVersionString() + "\n\n"
-
-	AboutText += _("GStreamer:\t\t%s") % about.getGStreamerVersionString() + "\n"
+	
 
 	fp_version = getFPVersion()
 	if fp_version is None:
