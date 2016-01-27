@@ -5,15 +5,15 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-05 14:38+0000\n"
-"PO-Revision-Date: 2016-01-24 16:00+0100\n"
-"Last-Translator: VillaK\n"
+"PO-Revision-Date: 2016-01-27 20:52+0100\n"
+"Last-Translator: Orerivia <openplus@open-plus.es>\n"
 "Language-Team: OpenPlus <www.open-plus.es>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Stop recording now"
@@ -16375,3 +16375,66 @@ msgstr ""
 
 msgid "Please wait whilst feeds state is checked..."
 msgstr "Espera hasta que se verifique el estado de las fuentes."
+
+msgid "GigaBlue Setup"
+msgstr "Configuración GigaBlue"
+
+msgid "Videomode:"
+msgstr "Modo de video:"
+
+msgid "Execution condition"
+msgstr "Condición de ejecución"
+
+msgid "Standard(always)"
+msgstr "Estándar (siempre)"
+
+msgid "without Query"
+msgstr "sin consultar"
+
+msgid "only in Standby"
+msgstr "sólo en reposo"
+
+msgid "What Day of month?"
+msgstr "Qué día del mes?"
+
+msgid "External subtitle switchs fonts"
+msgstr "Cambiar fuente de subtítulo externo"
+
+msgid "External subtitle dialog colorisation"
+msgstr "Coloración del diálogo de subtítulos externos"
+
+msgid "Rewrap subtitles"
+msgstr "Volver a envolver subtítulos"
+
+msgid "Show status messages when switch to live TV"
+msgstr "Mostrar mensajes de estado cuando se cambie a TV en vivo"
+
+msgid "Include AIT in recordings"
+msgstr "Incluir AIT en grabaciones"
+
+msgid "Remember last service in PiP"
+msgstr "Recordar último servicio en PiP"
+
+msgid "Enable unlinked bouquets"
+msgstr "Habilitar bouquets desvinculados"
+
+msgid "Panic channel"
+msgstr "Canal de pánico"
+
+msgid "Service picons downsize"
+msgstr "Reducir tamaño de picons"
+
+msgid "Channel zap delay mode"
+msgstr ""
+
+msgid "Channel zap delay first button"
+msgstr ""
+
+msgid "Channel zap delay another button"
+msgstr ""
+
+msgid "Number of digits in channel number"
+msgstr "Dígitos en el número de canal"
+
+msgid "Load unlinked userbouquets"
+msgstr "Cargar bouquets de usuario desvinculados"
